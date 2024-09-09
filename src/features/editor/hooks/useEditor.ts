@@ -1,7 +1,18 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { fabric } from "fabric";
+import { useAutoResize } from "./useAutoResize";
 
 const useEditor = () => {
+  const [canvasWrapper, setCanvasWrapper] = useState<HTMLDivElement | null>(
+    null
+  );
+  const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
+
+  useAutoResize({
+    canvasWrapper,
+    canvas,
+  });
+
   const init = useCallback(
     ({
       initialCanvasWrapper,
@@ -45,6 +56,10 @@ const useEditor = () => {
       initialCanvas.centerObject(defaultCanvasWorkspace);
       // element outside the defaultCanvasWorkspace rectangle will not be visible
       initialCanvas.clipPath = defaultCanvasWorkspace;
+
+      // Set the canvas to the state
+      setCanvas(initialCanvas);
+      setCanvasWrapper(initialCanvasWrapper);
 
       const rectangleObject = new fabric.Rect({
         width: 300,
