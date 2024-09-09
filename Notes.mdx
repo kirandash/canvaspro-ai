@@ -16,3 +16,15 @@
   - https://nextjs.org/docs/app/building-your-application/routing/route-groups
 - Private folders:
   - https://nextjs.org/docs/app/building-your-application/routing/colocation#private-folders
+
+### 3. Fabric.js setup
+
+- http://fabricjs.com/
+- https://github.com/fabricjs/fabric.js
+- http://fabricjs.com/docs/
+- https://github.com/Automattic/node-canvas#compiling
+- Create Editor page, component and useEditor.ts hook
+- why we use canvasContainerRef
+  - Canvas resizing is difficult hence we are using a div as canvasContainerRef and we will use a resize observer to see if canvasContainerRef is resized and use the width and height from there to set width and height of canvas
+- `npm install fabric@5.3.0-browser --save` and `npm install -D @types/fabric@5.3.0`
+  - the browser version is important because it is the only version that will not use node-canvas as dependency
