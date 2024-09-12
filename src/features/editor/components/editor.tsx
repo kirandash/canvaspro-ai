@@ -53,7 +53,10 @@ const Editor = () => {
 
   return (
     <div className="h-full flex flex-col">
-      <Navbar />
+      <Navbar
+        selectedTool={selectedTool}
+        onChangeSelectedTool={onChangeSelectedTool}
+      />
       <div className="flex absolute h-[calc(100%-56px)] w-full top-14">
         <Sidebar
           selectedTool={selectedTool}

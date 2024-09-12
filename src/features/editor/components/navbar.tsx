@@ -18,8 +18,15 @@ import {
   Redo2,
   Undo2,
 } from "lucide-react";
+import { SelectedTool } from "@/features/editor/types";
+import { cn } from "@/lib/utils";
 
-const Navbar = () => {
+type Props = {
+  selectedTool: SelectedTool;
+  onChangeSelectedTool: (tool: SelectedTool) => void;
+};
+
+const Navbar = ({ selectedTool, onChangeSelectedTool }: Props) => {
   return (
     <nav className="w-full flex items-center h-14 p-2 gap-4">
       <Logo />
@@ -59,8 +66,16 @@ const Navbar = () => {
           </DropdownMenuContent>
         </DropdownMenu>
         <Button>Resize</Button>
-        <Button variant={"ghost"} size={"icon"}>
-          <MousePointer2 />
+        <Button
+          variant={"ghost"}
+          size={"icon"}
+          onClick={() => onChangeSelectedTool("select")}
+        >
+          <MousePointer2
+            className={cn(
+              selectedTool === "select" ? "stroke-cyan-600  rounded" : ""
+            )}
+          />
         </Button>
         <Button variant={"ghost"} size={"icon"}>
           <Undo2 />
