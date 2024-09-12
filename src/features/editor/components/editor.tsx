@@ -3,10 +3,10 @@
 import React, { useEffect, useRef } from "react";
 import { useEditor } from "@/features/editor/hooks/useEditor";
 import { fabric } from "fabric";
-import Navbar from "./navbar";
-import Sidebar from "./sidebar";
-import Toolbar from "./toolbar";
-import Footer from "./footer";
+import Navbar from "@/features/editor/components/navbar";
+import Sidebar from "@/features/editor/components/sidebar";
+import Toolbar from "@/features/editor/components/toolbar";
+import Footer from "@/features/editor/components/footer";
 
 const Editor = () => {
   const { init } = useEditor();
