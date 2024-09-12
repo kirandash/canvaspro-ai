@@ -1,0 +1,17 @@
+export type SelectedTool =
+  | "templates"
+  | "text"
+  | "shapes"
+  | "settings"
+  | "projects"
+  | "ai"
+  | "remove-bg"
+  | "select"
+  | "images"
+  | "draw"
+  | "fill"
+  | "stroke-width"
+  | "stroke-color"
+  | "font"
+  | "opacity"
+  | "filter";
