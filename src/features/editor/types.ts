@@ -1,3 +1,5 @@
+import { fabric } from "fabric";
+
 export type SelectedTool =
   | "templates"
   | "text"
@@ -15,3 +17,15 @@ export type SelectedTool =
   | "font"
   | "opacity"
   | "filter";
+
+export type CreateEditorProps = {
+  canvas: fabric.Canvas;
+};
+
+export type Editor = {
+  addRectangle: () => void;
+  addCircle: () => void;
+  addTriangle: () => void;
+  addInverseTriangle: () => void;
+  addDiamond: () => void;
+};

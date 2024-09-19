@@ -11,7 +11,7 @@ import { SelectedTool } from "@/features/editor/types";
 import ElementsSidebar from "@/features/editor/components/elements-sidebar";
 
 const Editor = () => {
-  const { init } = useEditor();
+  const { init, editor } = useEditor();
 
   const canvasWrapperRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef(null);
@@ -66,6 +66,7 @@ const Editor = () => {
         <ElementsSidebar
           selectedTool={selectedTool}
           onChangeSelectedTool={onChangeSelectedTool}
+          editor={editor}
         />
         <main className="flex relative overflow-auto bg-zinc-900 flex-1 flex-col">
           <Toolbar />

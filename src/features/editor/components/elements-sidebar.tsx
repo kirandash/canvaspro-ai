@@ -2,17 +2,24 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import ElementsSidebarHeader from "@/features/editor/components/elements-sidebar-header";
 import Shape from "@/features/editor/components/shape";
 import ToolSidebarClose from "@/features/editor/components/tool-sidebar-close";
-import { SelectedTool } from "@/features/editor/types";
+import { Editor, SelectedTool } from "@/features/editor/types";
 import { cn } from "@/lib/utils";
-import { Circle, Diamond, Square, Triangle } from "lucide-react";
+import { Circle, Square } from "lucide-react";
 import React from "react";
+import { FaDiamond } from "react-icons/fa6";
+import { IoTriangle } from "react-icons/io5";
 
 type Props = {
   selectedTool: SelectedTool;
   onChangeSelectedTool: (tool: SelectedTool) => void;
+  editor: Editor | undefined;
 };
 
-const ElementsSidebar = ({ selectedTool, onChangeSelectedTool }: Props) => {
+const ElementsSidebar = ({
+  selectedTool,
+  onChangeSelectedTool,
+  editor,
+}: Props) => {
   return (
     <aside
       className={cn(
@@ -23,11 +30,15 @@ const ElementsSidebar = ({ selectedTool, onChangeSelectedTool }: Props) => {
       <ElementsSidebarHeader title="Shapes" />
       <ScrollArea className="whitespace-nowrap">
         <div className="flex w-max space-x-2 p-4">
-          <Shape onClick={() => {}} icon={Square} />
-          <Shape onClick={() => {}} icon={Circle} />
-          <Shape onClick={() => {}} icon={Triangle} />
-          <Shape onClick={() => {}} icon={Triangle} className="rotate-180" />
-          <Shape onClick={() => {}} icon={Diamond} />
+          <Shape onClick={() => editor?.addRectangle()} icon={Square} />
+          <Shape onClick={() => editor?.addCircle()} icon={Circle} />
+          <Shape onClick={() => editor?.addTriangle()} icon={IoTriangle} />
+          <Shape
+            onClick={() => editor?.addInverseTriangle()}
+            icon={IoTriangle}
+            className="rotate-180"
+          />
+          <Shape onClick={() => editor?.addDiamond()} icon={FaDiamond} />
         </div>
       </ScrollArea>
       <ToolSidebarClose onClick={() => onChangeSelectedTool("select")} />
