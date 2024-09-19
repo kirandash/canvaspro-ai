@@ -1,4 +1,4 @@
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import ElementsSidebarHeader from "@/features/editor/components/elements-sidebar-header";
 import Shape from "@/features/editor/components/shape";
 import ToolSidebarClose from "@/features/editor/components/tool-sidebar-close";
@@ -8,6 +8,7 @@ import { Circle, Square } from "lucide-react";
 import React from "react";
 import { FaDiamond } from "react-icons/fa6";
 import { IoTriangle } from "react-icons/io5";
+import { MdHexagon, MdPentagon } from "react-icons/md";
 
 type Props = {
   selectedTool: SelectedTool;
@@ -39,7 +40,10 @@ const ElementsSidebar = ({
             className="rotate-180"
           />
           <Shape onClick={() => editor?.addDiamond()} icon={FaDiamond} />
+          <Shape onClick={() => editor?.addPentagon()} icon={MdPentagon} />
+          <Shape onClick={() => editor?.addHexagon()} icon={MdHexagon} />
         </div>
+        <ScrollBar orientation="horizontal" />
       </ScrollArea>
       <ToolSidebarClose onClick={() => onChangeSelectedTool("select")} />
     </aside>

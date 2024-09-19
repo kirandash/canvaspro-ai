@@ -5,6 +5,7 @@ import { CreateEditorProps, Editor } from "@/features/editor/types";
 import {
   CIRCLE_OPTIONS,
   DIAMOND_OPTIONS,
+  PENTAGON_OPTIONS,
   RECTANGLE_OPTIONS,
   TRIANGLE_OPTIONS,
 } from "@/features/editor/constants";
@@ -87,6 +88,43 @@ const createEditor = ({ canvas }: CreateEditorProps): Editor => {
         }
       );
       addObjectToCanvas(diamondObject);
+    },
+    addPentagon: () => {
+      // Pentagon is a 5 sided polygon
+      const WIDTH = PENTAGON_OPTIONS.width;
+      const HEIGHT = PENTAGON_OPTIONS.height;
+      const pentagonObject = new fabric.Polygon(
+        [
+          { x: WIDTH / 2, y: 0 },
+          { x: WIDTH, y: HEIGHT / 3 },
+          { x: (WIDTH * 2) / 3, y: HEIGHT },
+          { x: WIDTH / 3, y: HEIGHT },
+          { x: 0, y: HEIGHT / 3 },
+        ],
+        {
+          ...PENTAGON_OPTIONS,
+        }
+      );
+      addObjectToCanvas(pentagonObject);
+    },
+    addHexagon: () => {
+      // Hexagon is a 6 sided polygon
+      const WIDTH = PENTAGON_OPTIONS.width;
+      const HEIGHT = PENTAGON_OPTIONS.height;
+      const hexagonObject = new fabric.Polygon(
+        [
+          { x: WIDTH / 4, y: 0 },
+          { x: (WIDTH * 3) / 4, y: 0 },
+          { x: WIDTH, y: HEIGHT / 2 },
+          { x: (WIDTH * 3) / 4, y: HEIGHT },
+          { x: WIDTH / 4, y: HEIGHT },
+          { x: 0, y: HEIGHT / 2 },
+        ],
+        {
+          ...PENTAGON_OPTIONS,
+        }
+      );
+      addObjectToCanvas(hexagonObject);
     },
   };
 };

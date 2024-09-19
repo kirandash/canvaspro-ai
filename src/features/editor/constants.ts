@@ -28,3 +28,15 @@ export const DIAMOND_OPTIONS = {
   height: 700,
   fill: FILL_COLOR,
 };
+
+export const PENTAGON_OPTIONS = {
+  width: 500,
+  height: 500,
+  fill: FILL_COLOR,
+};
+
+export const HEXAGON_OPTIONS = {
+  width: 500,
+  height: 500,
+  fill: FILL_COLOR,
+};

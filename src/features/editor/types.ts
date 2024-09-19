@@ -28,4 +28,6 @@ export type Editor = {
   addTriangle: () => void;
   addInverseTriangle: () => void;
   addDiamond: () => void;
+  addPentagon: () => void;
+  addHexagon: () => void;
 };
