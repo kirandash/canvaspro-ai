@@ -9,9 +9,9 @@ export const RECTANGLE_OPTIONS = {
 };
 
 export const CIRCLE_OPTIONS = {
-  radius: 500,
-  width: 500,
-  height: 500,
+  radius: 200,
+  width: 200,
+  height: 200,
   fill: FILL_COLOR,
   stroke: STROKE_COLOR,
   strokeWidth: STROKE_WIDTH,
