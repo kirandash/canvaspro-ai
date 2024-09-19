@@ -8,6 +8,7 @@ import Sidebar from "@/features/editor/components/sidebar";
 import Toolbar from "@/features/editor/components/toolbar";
 import Footer from "@/features/editor/components/footer";
 import { SelectedTool } from "@/features/editor/types";
+import ElementsSidebar from "@/features/editor/components/elements-sidebar";
 
 const Editor = () => {
   const { init } = useEditor();
@@ -62,6 +63,10 @@ const Editor = () => {
           selectedTool={selectedTool}
           onChangeSelectedTool={onChangeSelectedTool}
         />
+        <ElementsSidebar
+          selectedTool={selectedTool}
+          onChangeSelectedTool={onChangeSelectedTool}
+        />
         <main className="flex relative overflow-auto bg-zinc-900 flex-1 flex-col">
           <Toolbar />
           <div
@@ -71,7 +76,6 @@ const Editor = () => {
             {/* Canvas resizing is difficult hence we are using a div as canvasWrapperRef and we will use a resize observer to see if canvasWrapperRef is resized and use the width and height from there to set width and height of canvas */}
             <canvas ref={canvasRef} />
           </div>
-
           <Footer />
         </main>
       </div>
