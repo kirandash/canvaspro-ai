@@ -43,6 +43,7 @@ export type Editor = {
   canvas: fabric.Canvas;
   fillColor: string;
   getActiveObjectFillColor: () => string;
+  getActiveObjectStrokeColor: () => string;
   strokeColor: string;
   strokeWidth: number;
   selectedObjects: fabric.Object[];

@@ -210,6 +210,14 @@ const createEditor = ({
       }
       return fillColor;
     },
+    getActiveObjectStrokeColor: () => {
+      const activeObject = selectedObjects[0];
+
+      if (activeObject) {
+        return activeObject.get("stroke") ?? strokeColor;
+      }
+      return strokeColor;
+    },
     strokeColor,
     strokeWidth,
     selectedObjects,

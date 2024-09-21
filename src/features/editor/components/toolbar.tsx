@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { FILL_COLOR } from "@/features/editor/constants";
+import { FILL_COLOR, STROKE_COLOR } from "@/features/editor/constants";
 import { Editor, SelectedTool } from "@/features/editor/types";
 import { cn } from "@/lib/utils";
 import React from "react";
@@ -12,6 +12,7 @@ type Props = {
 
 const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
   const fillColor = editor?.getActiveObjectFillColor();
+  const strokeColor = editor?.getActiveObjectStrokeColor();
 
   if (editor?.selectedObjects.length === 0) {
     return <div className="h-10 my-2" />;
@@ -31,6 +32,20 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
             style={{
               backgroundColor:
                 typeof fillColor === "string" ? fillColor : FILL_COLOR,
+            }}
+          />
+        </Button>
+        <Button
+          variant={"ghost"}
+          size={"icon"}
+          onClick={() => onChangeSelectedTool("stroke-color")}
+          className={cn(selectedTool === "stroke-color" ? "neutral-600" : "")}
+        >
+          <div
+            className="rounded size-6 border-2"
+            style={{
+              borderColor:
+                typeof strokeColor === "string" ? strokeColor : STROKE_COLOR,
             }}
           />
         </Button>
