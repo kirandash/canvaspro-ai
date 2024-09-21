@@ -5,12 +5,25 @@ import { CreateEditorProps, Editor } from "@/features/editor/types";
 import {
   CIRCLE_OPTIONS,
   DIAMOND_OPTIONS,
+  FILL_COLOR,
   PENTAGON_OPTIONS,
   RECTANGLE_OPTIONS,
+  STROKE_WIDTH,
   TRIANGLE_OPTIONS,
 } from "@/features/editor/constants";
+import { useCanvasEvents } from "@/features/editor/hooks/useCanvasEvents";
+import { isTextType } from "@/features/editor/utils";
 
-const createEditor = ({ canvas }: CreateEditorProps): Editor => {
+const createEditor = ({
+  canvas,
+  fillColor,
+  strokeColor,
+  strokeWidth,
+  setFillColor,
+  setStrokeColor,
+  setStrokeWidth,
+  selectedObjects,
+}: CreateEditorProps): Editor => {
   const getWorkSpace = () => {
     return canvas
       .getObjects()
@@ -40,16 +53,30 @@ const createEditor = ({ canvas }: CreateEditorProps): Editor => {
         ...RECTANGLE_OPTIONS,
         rx: 30,
         ry: 30,
+        // override the default fill, stroke and strokeWidth with the current values
+        fill: fillColor,
+        stroke: strokeColor,
+        strokeWidth: strokeWidth,
       });
       addObjectToCanvas(rectangleObject);
     },
     addCircle: () => {
-      const circleObject = new fabric.Circle(CIRCLE_OPTIONS);
+      const circleObject = new fabric.Circle({
+        ...CIRCLE_OPTIONS,
+        // override the default fill, stroke and strokeWidth with the current values
+        fill: fillColor,
+        stroke: strokeColor,
+        strokeWidth: strokeWidth,
+      });
       addObjectToCanvas(circleObject);
     },
     addTriangle: () => {
       const triangleObject = new fabric.Triangle({
         ...TRIANGLE_OPTIONS,
+        // override the default fill, stroke and strokeWidth with the current values
+        fill: fillColor,
+        stroke: strokeColor,
+        strokeWidth: strokeWidth,
       });
       addObjectToCanvas(triangleObject);
     },
@@ -69,6 +96,10 @@ const createEditor = ({ canvas }: CreateEditorProps): Editor => {
         ],
         {
           ...TRIANGLE_OPTIONS,
+          // override the default fill, stroke and strokeWidth with the current values
+          fill: fillColor,
+          stroke: strokeColor,
+          strokeWidth: strokeWidth,
         }
       );
       addObjectToCanvas(triangleObject);
@@ -85,6 +116,10 @@ const createEditor = ({ canvas }: CreateEditorProps): Editor => {
         ],
         {
           ...DIAMOND_OPTIONS,
+          // override the default fill, stroke and strokeWidth with the current values
+          fill: fillColor,
+          stroke: strokeColor,
+          strokeWidth: strokeWidth,
         }
       );
       addObjectToCanvas(diamondObject);
@@ -103,6 +138,10 @@ const createEditor = ({ canvas }: CreateEditorProps): Editor => {
         ],
         {
           ...PENTAGON_OPTIONS,
+          // override the default fill, stroke and strokeWidth with the current values
+          fill: fillColor,
+          stroke: strokeColor,
+          strokeWidth: strokeWidth,
         }
       );
       addObjectToCanvas(pentagonObject);
@@ -122,10 +161,50 @@ const createEditor = ({ canvas }: CreateEditorProps): Editor => {
         ],
         {
           ...PENTAGON_OPTIONS,
+          // override the default fill, stroke and strokeWidth with the current values
+          fill: fillColor,
+          stroke: strokeColor,
+          strokeWidth: strokeWidth,
         }
       );
       addObjectToCanvas(hexagonObject);
     },
+    addFillColor: (color: string) => {
+      setFillColor(color);
+      // const activeObject = canvas.getActiveObject();
+      // if (activeObject) {
+      //   activeObject.set({ fill: color });
+      // }
+      canvas.getActiveObjects().forEach((object) => {
+        object.set({ fill: color });
+      });
+      // This is required to re-render the canvas after changing the fill color
+      canvas.renderAll();
+    },
+    addStrokeColor: (color: string) => {
+      setStrokeColor(color);
+      canvas.getActiveObjects().forEach((object) => {
+        // Hack to set the color of the text object because text object does not have a stroke property
+        if (isTextType(object.type)) {
+          object.set({ fill: color });
+          return;
+        }
+        object.set({ stroke: color });
+      });
+      canvas.renderAll();
+    },
+    addStrokeWidth: (width: number) => {
+      setStrokeWidth(width);
+      canvas.getActiveObjects().forEach((object) => {
+        object.set({ strokeWidth: width });
+      });
+      canvas.renderAll();
+    },
+    canvas,
+    fillColor,
+    strokeColor,
+    strokeWidth,
+    selectedObjects,
   };
 };
 
@@ -134,6 +213,17 @@ const useEditor = () => {
     null
   );
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
+  // 🚨 TODO: Check why "^_" is not being ignored in eslint
+  const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([]);
+
+  const [fillColor, setFillColor] = useState<string>(FILL_COLOR);
+  const [strokeColor, setStrokeColor] = useState<string>(FILL_COLOR);
+  const [strokeWidth, setStrokeWidth] = useState<number>(STROKE_WIDTH);
+
+  useCanvasEvents({
+    canvas,
+    setSelectedObjects,
+  });
 
   useAutoResize({
     canvasWrapper,
@@ -144,10 +234,17 @@ const useEditor = () => {
     if (canvas) {
       return createEditor({
         canvas,
+        fillColor,
+        strokeColor,
+        strokeWidth,
+        setFillColor,
+        setStrokeColor,
+        setStrokeWidth,
+        selectedObjects,
       });
     }
     return undefined;
-  }, [canvas]);
+  }, [canvas, fillColor, strokeColor, strokeWidth, selectedObjects]);
 
   const init = useCallback(
     ({

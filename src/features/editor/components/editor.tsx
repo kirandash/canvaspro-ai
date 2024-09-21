@@ -9,6 +9,7 @@ import Toolbar from "@/features/editor/components/toolbar";
 import Footer from "@/features/editor/components/footer";
 import { SelectedTool } from "@/features/editor/types";
 import ElementsSidebar from "@/features/editor/components/elements-sidebar";
+import ColorSidebar from "@/features/editor/components/color-sidebar";
 
 const Editor = () => {
   const { init, editor } = useEditor();
@@ -68,8 +69,19 @@ const Editor = () => {
           onChangeSelectedTool={onChangeSelectedTool}
           editor={editor}
         />
+        <ColorSidebar
+          selectedTool={selectedTool}
+          onChangeSelectedTool={onChangeSelectedTool}
+          editor={editor}
+        />
         <main className="flex relative overflow-auto bg-zinc-900 flex-1 flex-col">
-          <Toolbar />
+          <Toolbar
+            editor={editor}
+            selectedTool={selectedTool}
+            onChangeSelectedTool={onChangeSelectedTool}
+            // Hack to re-render toolbar when active object changes
+            key={JSON.stringify(editor?.canvas.getActiveObject())}
+          />
           <div
             className="h-[calc(100%-96px)] flex-1 bg-zinc-900"
             ref={canvasWrapperRef}

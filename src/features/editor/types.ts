@@ -20,6 +20,13 @@ export type SelectedTool =
 
 export type CreateEditorProps = {
   canvas: fabric.Canvas;
+  fillColor: string;
+  strokeColor: string;
+  strokeWidth: number;
+  setFillColor: (color: string) => void;
+  setStrokeColor: (color: string) => void;
+  setStrokeWidth: (width: number) => void;
+  selectedObjects: fabric.Object[];
 };
 
 export type Editor = {
@@ -30,4 +37,12 @@ export type Editor = {
   addDiamond: () => void;
   addPentagon: () => void;
   addHexagon: () => void;
+  addFillColor: (color: string) => void;
+  addStrokeColor: (color: string) => void;
+  addStrokeWidth: (width: number) => void;
+  canvas: fabric.Canvas;
+  fillColor: string;
+  strokeColor: string;
+  strokeWidth: number;
+  selectedObjects: fabric.Object[];
 };
