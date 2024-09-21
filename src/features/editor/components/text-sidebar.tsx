@@ -5,7 +5,6 @@ import ElementsSidebarHeader from "@/features/editor/components/elements-sidebar
 import ToolSidebarClose from "@/features/editor/components/tool-sidebar-close";
 import { Editor, SelectedTool } from "@/features/editor/types";
 import { cn } from "@/lib/utils";
-import { TypeOutline } from "lucide-react";
 import React from "react";
 import { TfiText } from "react-icons/tfi";
 
