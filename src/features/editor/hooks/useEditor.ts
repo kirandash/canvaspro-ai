@@ -201,14 +201,26 @@ const createEditor = ({
       canvas.renderAll();
     },
     canvas,
-    fillColor,
+    fillColor, // editor fill color
+    getActiveObjectFillColor: () => {
+      const activeObject = selectedObjects[0];
+
+      if (activeObject) {
+        return (activeObject.get("fill") as string) ?? fillColor; // active object fill color
+      }
+      return fillColor;
+    },
     strokeColor,
     strokeWidth,
     selectedObjects,
   };
 };
 
-const useEditor = () => {
+type Props = {
+  selectionClearedCallback: () => void;
+};
+
+const useEditor = ({ selectionClearedCallback }: Props) => {
   const [canvasWrapper, setCanvasWrapper] = useState<HTMLDivElement | null>(
     null
   );
@@ -223,6 +235,7 @@ const useEditor = () => {
   useCanvasEvents({
     canvas,
     setSelectedObjects,
+    selectionClearedCallback,
   });
 
   useAutoResize({

@@ -3,9 +3,14 @@ import { useEffect } from "react";
 type Props = {
   canvas: fabric.Canvas | null;
   setSelectedObjects: (objects: fabric.Object[]) => void;
+  selectionClearedCallback?: () => void;
 };
 
-export const useCanvasEvents = ({ canvas, setSelectedObjects }: Props) => {
+export const useCanvasEvents = ({
+  canvas,
+  setSelectedObjects,
+  selectionClearedCallback,
+}: Props) => {
   useEffect(() => {
     if (canvas) {
       canvas.on("selection:created", (e) => {
@@ -19,6 +24,7 @@ export const useCanvasEvents = ({ canvas, setSelectedObjects }: Props) => {
       canvas.on("selection:cleared", () => {
         console.log("Selection cleared");
         setSelectedObjects([]);
+        selectionClearedCallback?.();
       });
     }
 
@@ -29,7 +35,6 @@ export const useCanvasEvents = ({ canvas, setSelectedObjects }: Props) => {
         canvas.off("selection:cleared");
       }
     };
-    // eslint does not recognize setSelectedObjects as a setState function
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [canvas]);
+    // eslint does not recognize setSelectedObjects as a setState function but setSelectedObjects is not required because it is a setter function
+  }, [canvas, selectionClearedCallback, setSelectedObjects]);
 };

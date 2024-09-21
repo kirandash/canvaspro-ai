@@ -42,6 +42,7 @@ export type Editor = {
   addStrokeWidth: (width: number) => void;
   canvas: fabric.Canvas;
   fillColor: string;
+  getActiveObjectFillColor: () => string;
   strokeColor: string;
   strokeWidth: number;
   selectedObjects: fabric.Object[];

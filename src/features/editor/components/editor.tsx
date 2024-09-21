@@ -10,14 +10,22 @@ import Footer from "@/features/editor/components/footer";
 import { SelectedTool } from "@/features/editor/types";
 import ElementsSidebar from "@/features/editor/components/elements-sidebar";
 import ColorSidebar from "@/features/editor/components/color-sidebar";
+import { selectionOnlyTools } from "@/features/editor/constants";
 
 const Editor = () => {
-  const { init, editor } = useEditor();
-
   const canvasWrapperRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef(null);
   const [selectedTool, setSelectedTool] =
     React.useState<SelectedTool>("select");
+  const onSelectionClear = useCallback(() => {
+    if (selectionOnlyTools.includes(selectedTool)) {
+      setSelectedTool("select");
+    }
+  }, [selectedTool]);
+
+  const { init, editor } = useEditor({
+    selectionClearedCallback: onSelectionClear,
+  });
 
   // added useCallback because onChangeSelectedTool is a dependency of useEffect
   const onChangeSelectedTool = useCallback(

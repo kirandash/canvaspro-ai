@@ -18,7 +18,7 @@ const ColorSidebar = ({
   onChangeSelectedTool,
   editor,
 }: Props) => {
-  const color = editor?.fillColor ?? FILL_COLOR;
+  const color = editor?.getActiveObjectFillColor() ?? FILL_COLOR;
   const onChange = (color: string) => {
     editor?.addFillColor(color);
   };

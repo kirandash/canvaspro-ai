@@ -11,7 +11,7 @@ type Props = {
 };
 
 const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
-  const fillProp = editor?.fillColor;
+  const fillColor = editor?.getActiveObjectFillColor();
 
   if (editor?.selectedObjects.length === 0) {
     return <div className="h-10 my-2" />;
@@ -30,7 +30,7 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
             className="rounded size-6"
             style={{
               backgroundColor:
-                typeof fillProp === "string" ? fillProp : FILL_COLOR,
+                typeof fillColor === "string" ? fillColor : FILL_COLOR,
             }}
           />
         </Button>

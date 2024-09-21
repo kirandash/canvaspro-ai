@@ -23,6 +23,16 @@ export const colors = [
   "transparent",
 ];
 
+export const selectionOnlyTools = [
+  "fill",
+  "stroke-width",
+  "stroke-color",
+  "font",
+  "opacity",
+  "filter",
+  "remove-bg",
+];
+
 export const FILL_COLOR = "rgba(0,0,0,0.3)";
 export const STROKE_COLOR = "rgba(0,0,0,1)";
 export const STROKE_WIDTH = 2;
