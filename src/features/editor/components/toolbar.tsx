@@ -3,6 +3,7 @@ import { FILL_COLOR, STROKE_COLOR } from "@/features/editor/constants";
 import { Editor, SelectedTool } from "@/features/editor/types";
 import { cn } from "@/lib/utils";
 import React from "react";
+import { RxBorderWidth } from "react-icons/rx";
 
 type Props = {
   editor: Editor | undefined;
@@ -48,6 +49,14 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
                 typeof strokeColor === "string" ? strokeColor : STROKE_COLOR,
             }}
           />
+        </Button>
+        <Button
+          variant={"ghost"}
+          size={"icon"}
+          onClick={() => onChangeSelectedTool("stroke-width")}
+          className={cn(selectedTool === "stroke-width" ? "neutral-600" : "")}
+        >
+          <RxBorderWidth className="size-6" />
         </Button>
       </div>
     </div>
