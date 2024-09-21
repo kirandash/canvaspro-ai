@@ -33,11 +33,13 @@ export const selectionOnlyTools = [
   "remove-bg",
 ];
 
-export const FILL_COLOR = "rgba(0,0,0,0.3)";
+export const FILL_COLOR = "rgba(0,0,0,0.7)";
 export const STROKE_COLOR = "rgba(0,0,0,1)";
 export const STROKE_WIDTH = 2;
 export const STROKE_DASH_ARRAY = [];
 export const OPACITY = 1;
+export const FONT_SIZE = 40;
+export const FONT_FAMILY = "Arial";
 
 export const RECTANGLE_OPTIONS = {
   width: 500,
@@ -52,6 +54,16 @@ export const CIRCLE_OPTIONS = {
   fill: FILL_COLOR,
   stroke: STROKE_COLOR,
   strokeWidth: STROKE_WIDTH,
+};
+
+export const TEXT_OPTIONS = {
+  type: "textbox",
+  left: 150,
+  top: 150,
+  width: 400,
+  fill: FILL_COLOR,
+  fontSize: FONT_SIZE,
+  fontFamily: FONT_FAMILY,
 };
 
 export const TRIANGLE_OPTIONS = {

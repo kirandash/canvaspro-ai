@@ -1,4 +1,5 @@
 import { fabric } from "fabric";
+import { ITextboxOptions } from "fabric/fabric-impl";
 
 export type SelectedTool =
   | "templates"
@@ -34,6 +35,7 @@ export type CreateEditorProps = {
 export type Editor = {
   addRectangle: () => void;
   addCircle: () => void;
+  addText: (text: string, options?: ITextboxOptions) => void;
   addTriangle: () => void;
   addInverseTriangle: () => void;
   addDiamond: () => void;

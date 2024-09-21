@@ -11,6 +11,7 @@ import {
   RECTANGLE_OPTIONS,
   STROKE_DASH_ARRAY,
   STROKE_WIDTH,
+  TEXT_OPTIONS,
   TRIANGLE_OPTIONS,
 } from "@/features/editor/constants";
 import { useCanvasEvents } from "@/features/editor/hooks/useCanvasEvents";
@@ -75,6 +76,14 @@ const createEditor = ({
         strokeDashArray,
       });
       addObjectToCanvas(circleObject);
+    },
+    addText: (text, options) => {
+      const textObject = new fabric.Textbox(text, {
+        ...TEXT_OPTIONS,
+        fill: fillColor,
+        ...options,
+      });
+      addObjectToCanvas(textObject);
     },
     addTriangle: () => {
       const triangleObject = new fabric.Triangle({
