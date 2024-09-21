@@ -37,15 +37,18 @@ export type Editor = {
   addTriangle: () => void;
   addInverseTriangle: () => void;
   addDiamond: () => void;
+  addFillColor: (color: string) => void;
   addPentagon: () => void;
   addHexagon: () => void;
-  addFillColor: (color: string) => void;
+  addObjectOpacity: (opacity: number) => void;
   addStrokeColor: (color: string) => void;
   addStrokeWidth: (width: number) => void;
   addStrokeDashArray: (dashArray: number[]) => void;
   bringForward: () => void;
   canvas: fabric.Canvas;
+
   fillColor: string;
+  getActiveObjectOpacity: () => number;
   getActiveObjectFillColor: () => string;
   getActiveObjectStrokeColor: () => string;
   getActiveObjectStrokeWidth: () => number;

@@ -13,6 +13,7 @@ import ColorSidebar from "@/features/editor/components/color-sidebar";
 import { selectionOnlyTools } from "@/features/editor/constants";
 import BorderColorSidebar from "@/features/editor/components/border-color-sidebar";
 import BorderSidebar from "@/features/editor/components/border-sidebar";
+import TransparencySidebar from "@/features/editor/components/transparency-sidebar";
 
 const Editor = () => {
   const canvasWrapperRef = useRef<HTMLDivElement>(null);
@@ -90,6 +91,11 @@ const Editor = () => {
           editor={editor}
         />
         <BorderSidebar
+          selectedTool={selectedTool}
+          onChangeSelectedTool={onChangeSelectedTool}
+          editor={editor}
+        />
+        <TransparencySidebar
           selectedTool={selectedTool}
           onChangeSelectedTool={onChangeSelectedTool}
           editor={editor}

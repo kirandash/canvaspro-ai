@@ -4,7 +4,7 @@ import { Editor, SelectedTool } from "@/features/editor/types";
 import { cn } from "@/lib/utils";
 import { ArrowDownFromLine, ArrowUpFromLine } from "lucide-react";
 import React from "react";
-import { RxBorderWidth } from "react-icons/rx";
+import { RxBorderWidth, RxTransparencyGrid } from "react-icons/rx";
 
 type Props = {
   editor: Editor | undefined;
@@ -27,7 +27,7 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
           variant={"ghost"}
           size={"icon"}
           onClick={() => onChangeSelectedTool("fill")}
-          className={cn(selectedTool === "fill" ? "neutral-600" : "")}
+          className={cn(selectedTool === "fill" ? "bg-neutral-600" : "")}
         >
           <div
             className="rounded size-6"
@@ -41,7 +41,9 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
           variant={"ghost"}
           size={"icon"}
           onClick={() => onChangeSelectedTool("stroke-color")}
-          className={cn(selectedTool === "stroke-color" ? "neutral-600" : "")}
+          className={cn(
+            selectedTool === "stroke-color" ? "bg-neutral-600" : ""
+          )}
         >
           <div
             className="rounded size-6 border-2"
@@ -55,7 +57,9 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
           variant={"ghost"}
           size={"icon"}
           onClick={() => onChangeSelectedTool("stroke-width")}
-          className={cn(selectedTool === "stroke-width" ? "neutral-600" : "")}
+          className={cn(
+            selectedTool === "stroke-width" ? "bg-neutral-600" : ""
+          )}
         >
           <RxBorderWidth className="size-6" />
         </Button>
@@ -63,7 +67,6 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
           variant={"ghost"}
           size={"icon"}
           onClick={() => editor?.bringForward()}
-          className={cn(selectedTool === "stroke-width" ? "neutral-600" : "")}
         >
           <ArrowUpFromLine className="size-6" />
         </Button>
@@ -71,9 +74,16 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
           variant={"ghost"}
           size={"icon"}
           onClick={() => editor?.sendBackwards()}
-          className={cn(selectedTool === "stroke-width" ? "neutral-600" : "")}
         >
           <ArrowDownFromLine className="size-6" />
+        </Button>
+        <Button
+          variant={"ghost"}
+          size={"icon"}
+          onClick={() => onChangeSelectedTool("opacity")}
+          className={cn(selectedTool === "opacity" ? "bg-neutral-600" : "")}
+        >
+          <RxTransparencyGrid className="size-6" />
         </Button>
       </div>
     </div>

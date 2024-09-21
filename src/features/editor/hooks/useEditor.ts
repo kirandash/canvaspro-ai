@@ -6,6 +6,7 @@ import {
   CIRCLE_OPTIONS,
   DIAMOND_OPTIONS,
   FILL_COLOR,
+  OPACITY,
   PENTAGON_OPTIONS,
   RECTANGLE_OPTIONS,
   STROKE_DASH_ARRAY,
@@ -224,6 +225,12 @@ const createEditor = ({
       canvas.renderAll();
     },
     canvas,
+    addObjectOpacity: (opacity: number) => {
+      canvas.getActiveObjects().forEach((object) => {
+        object.set({ opacity });
+      });
+      canvas.renderAll();
+    },
     fillColor, // editor fill color
     getActiveObjectFillColor: () => {
       const activeObject = selectedObjects[0];
@@ -256,6 +263,14 @@ const createEditor = ({
         return activeObject.get("strokeDashArray") ?? strokeDashArray;
       }
       return strokeDashArray;
+    },
+    getActiveObjectOpacity: () => {
+      const activeObject = selectedObjects[0];
+
+      if (activeObject) {
+        return activeObject.get("opacity") ?? OPACITY;
+      }
+      return 1;
     },
     strokeColor,
     strokeWidth,

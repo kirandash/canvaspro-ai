@@ -1,3 +1,4 @@
+import { OPACITY } from "@/features/editor/constants";
 import { RGBColor } from "react-color";
 
 export function isTextType(type: string | undefined) {
@@ -8,7 +9,7 @@ export function rgbaObjectToString(color: RGBColor | "transparent") {
   if (color === "transparent") {
     return `rgba(0, 0, 0, 0)`;
   }
-  const alpha = color.a ?? 1;
+  const alpha = color.a ?? OPACITY;
 
   return `rgba(${color.r}, ${color.g}, ${color.b}, ${alpha})`;
 }
