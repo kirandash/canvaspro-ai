@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { FILL_COLOR, STROKE_COLOR } from "@/features/editor/constants";
 import { Editor, SelectedTool } from "@/features/editor/types";
 import { cn } from "@/lib/utils";
+import { ArrowDownFromLine, ArrowUpFromLine } from "lucide-react";
 import React from "react";
 import { RxBorderWidth } from "react-icons/rx";
 
@@ -57,6 +58,22 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
           className={cn(selectedTool === "stroke-width" ? "neutral-600" : "")}
         >
           <RxBorderWidth className="size-6" />
+        </Button>
+        <Button
+          variant={"ghost"}
+          size={"icon"}
+          onClick={() => editor?.bringForward()}
+          className={cn(selectedTool === "stroke-width" ? "neutral-600" : "")}
+        >
+          <ArrowUpFromLine className="size-6" />
+        </Button>
+        <Button
+          variant={"ghost"}
+          size={"icon"}
+          onClick={() => editor?.sendBackwards()}
+          className={cn(selectedTool === "stroke-width" ? "neutral-600" : "")}
+        >
+          <ArrowDownFromLine className="size-6" />
         </Button>
       </div>
     </div>

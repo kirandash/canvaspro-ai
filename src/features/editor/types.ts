@@ -43,6 +43,7 @@ export type Editor = {
   addStrokeColor: (color: string) => void;
   addStrokeWidth: (width: number) => void;
   addStrokeDashArray: (dashArray: number[]) => void;
+  bringForward: () => void;
   canvas: fabric.Canvas;
   fillColor: string;
   getActiveObjectFillColor: () => string;
@@ -52,4 +53,5 @@ export type Editor = {
   strokeColor: string;
   strokeWidth: number;
   selectedObjects: fabric.Object[];
+  sendBackwards: () => void;
 };

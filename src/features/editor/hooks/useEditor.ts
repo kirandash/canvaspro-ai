@@ -217,6 +217,12 @@ const createEditor = ({
       });
       canvas.renderAll();
     },
+    bringForward: () => {
+      canvas.getActiveObjects().forEach((object) => {
+        canvas.bringForward(object);
+      });
+      canvas.renderAll();
+    },
     canvas,
     fillColor, // editor fill color
     getActiveObjectFillColor: () => {
@@ -254,6 +260,16 @@ const createEditor = ({
     strokeColor,
     strokeWidth,
     selectedObjects,
+    sendBackwards: () => {
+      canvas.getActiveObjects().forEach((object) => {
+        canvas.sendBackwards(object);
+      });
+      canvas.renderAll();
+      const workspace = getWorkSpace();
+      if (workspace) {
+        workspace.sendToBack();
+      }
+    },
   };
 };
 
