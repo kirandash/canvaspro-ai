@@ -36,6 +36,7 @@ export const selectionOnlyTools = [
 export const FILL_COLOR = "rgba(0,0,0,0.3)";
 export const STROKE_COLOR = "rgba(0,0,0,1)";
 export const STROKE_WIDTH = 2;
+export const STROKE_DASH_ARRAY = [];
 
 export const RECTANGLE_OPTIONS = {
   width: 500,

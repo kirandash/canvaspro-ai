@@ -8,6 +8,7 @@ import {
   FILL_COLOR,
   PENTAGON_OPTIONS,
   RECTANGLE_OPTIONS,
+  STROKE_DASH_ARRAY,
   STROKE_WIDTH,
   TRIANGLE_OPTIONS,
 } from "@/features/editor/constants";
@@ -23,6 +24,8 @@ const createEditor = ({
   setStrokeColor,
   setStrokeWidth,
   selectedObjects,
+  strokeDashArray,
+  setStrokeDashArray,
 }: CreateEditorProps): Editor => {
   const getWorkSpace = () => {
     return canvas
@@ -53,10 +56,11 @@ const createEditor = ({
         ...RECTANGLE_OPTIONS,
         rx: 30,
         ry: 30,
-        // override the default fill, stroke and strokeWidth with the current values
+        // override the default fill, stroke and strokeWidth with the current values to preserve the current values
         fill: fillColor,
         stroke: strokeColor,
-        strokeWidth: strokeWidth,
+        strokeWidth,
+        strokeDashArray,
       });
       addObjectToCanvas(rectangleObject);
     },
@@ -66,7 +70,8 @@ const createEditor = ({
         // override the default fill, stroke and strokeWidth with the current values
         fill: fillColor,
         stroke: strokeColor,
-        strokeWidth: strokeWidth,
+        strokeWidth,
+        strokeDashArray,
       });
       addObjectToCanvas(circleObject);
     },
@@ -76,7 +81,8 @@ const createEditor = ({
         // override the default fill, stroke and strokeWidth with the current values
         fill: fillColor,
         stroke: strokeColor,
-        strokeWidth: strokeWidth,
+        strokeWidth,
+        strokeDashArray,
       });
       addObjectToCanvas(triangleObject);
     },
@@ -99,7 +105,8 @@ const createEditor = ({
           // override the default fill, stroke and strokeWidth with the current values
           fill: fillColor,
           stroke: strokeColor,
-          strokeWidth: strokeWidth,
+          strokeWidth,
+          strokeDashArray,
         }
       );
       addObjectToCanvas(triangleObject);
@@ -119,7 +126,8 @@ const createEditor = ({
           // override the default fill, stroke and strokeWidth with the current values
           fill: fillColor,
           stroke: strokeColor,
-          strokeWidth: strokeWidth,
+          strokeWidth,
+          strokeDashArray,
         }
       );
       addObjectToCanvas(diamondObject);
@@ -141,7 +149,8 @@ const createEditor = ({
           // override the default fill, stroke and strokeWidth with the current values
           fill: fillColor,
           stroke: strokeColor,
-          strokeWidth: strokeWidth,
+          strokeWidth,
+          strokeDashArray,
         }
       );
       addObjectToCanvas(pentagonObject);
@@ -164,7 +173,8 @@ const createEditor = ({
           // override the default fill, stroke and strokeWidth with the current values
           fill: fillColor,
           stroke: strokeColor,
-          strokeWidth: strokeWidth,
+          strokeWidth,
+          strokeDashArray,
         }
       );
       addObjectToCanvas(hexagonObject);
@@ -200,6 +210,13 @@ const createEditor = ({
       });
       canvas.renderAll();
     },
+    addStrokeDashArray: (dashArray: number[]) => {
+      setStrokeDashArray(dashArray);
+      canvas.getActiveObjects().forEach((object) => {
+        object.set({ strokeDashArray: dashArray });
+      });
+      canvas.renderAll();
+    },
     canvas,
     fillColor, // editor fill color
     getActiveObjectFillColor: () => {
@@ -226,6 +243,14 @@ const createEditor = ({
       }
       return strokeWidth;
     },
+    getActiveObjectStrokeDashArray: () => {
+      const activeObject = selectedObjects[0];
+
+      if (activeObject) {
+        return activeObject.get("strokeDashArray") ?? strokeDashArray;
+      }
+      return strokeDashArray;
+    },
     strokeColor,
     strokeWidth,
     selectedObjects,
@@ -247,6 +272,8 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
   const [fillColor, setFillColor] = useState<string>(FILL_COLOR);
   const [strokeColor, setStrokeColor] = useState<string>(FILL_COLOR);
   const [strokeWidth, setStrokeWidth] = useState<number>(STROKE_WIDTH);
+  const [strokeDashArray, setStrokeDashArray] =
+    useState<number[]>(STROKE_DASH_ARRAY);
 
   useCanvasEvents({
     canvas,
@@ -270,10 +297,19 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
         setStrokeColor,
         setStrokeWidth,
         selectedObjects,
+        strokeDashArray,
+        setStrokeDashArray,
       });
     }
     return undefined;
-  }, [canvas, fillColor, strokeColor, strokeWidth, selectedObjects]);
+  }, [
+    canvas,
+    fillColor,
+    strokeColor,
+    strokeWidth,
+    selectedObjects,
+    strokeDashArray,
+  ]);
 
   const init = useCallback(
     ({

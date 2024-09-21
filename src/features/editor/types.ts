@@ -23,9 +23,11 @@ export type CreateEditorProps = {
   fillColor: string;
   strokeColor: string;
   strokeWidth: number;
+  strokeDashArray: number[];
   setFillColor: (color: string) => void;
   setStrokeColor: (color: string) => void;
   setStrokeWidth: (width: number) => void;
+  setStrokeDashArray: (dashArray: number[]) => void;
   selectedObjects: fabric.Object[];
 };
 
@@ -40,11 +42,13 @@ export type Editor = {
   addFillColor: (color: string) => void;
   addStrokeColor: (color: string) => void;
   addStrokeWidth: (width: number) => void;
+  addStrokeDashArray: (dashArray: number[]) => void;
   canvas: fabric.Canvas;
   fillColor: string;
   getActiveObjectFillColor: () => string;
   getActiveObjectStrokeColor: () => string;
   getActiveObjectStrokeWidth: () => number;
+  getActiveObjectStrokeDashArray: () => number[];
   strokeColor: string;
   strokeWidth: number;
   selectedObjects: fabric.Object[];
