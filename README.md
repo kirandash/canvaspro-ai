@@ -1,6 +1,6 @@
 <div align="center">
   
-  <h1>CanvasPro AI - Feature rich graphic design AI SaaS platform</h1>
+  <h1>CanvasPro AI - Graphic design AI SaaS platform</h1>
 
 📚 Code for the Live stream tutorial series</span>
 
