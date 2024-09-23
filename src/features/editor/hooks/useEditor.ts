@@ -230,6 +230,49 @@ const createEditor = ({
       });
       canvas.renderAll();
     },
+    toggleUnderline: () => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          const textObject = object as fabric.Textbox;
+          const currentUnderline = textObject.get("underline");
+          const newUnderline = !currentUnderline;
+          textObject.set({ underline: newUnderline });
+        }
+      });
+      canvas.renderAll();
+    },
+    toggleLineThrough: () => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          const textObject = object as fabric.Textbox;
+          const currentLineThrough = textObject.get("linethrough");
+          const newLineThrough = !currentLineThrough;
+          textObject.set({ linethrough: newLineThrough });
+        }
+      });
+      canvas.renderAll();
+    },
+    toggleCase: () => {
+      const activeObjects = canvas.getActiveObjects();
+      if (activeObjects.length === 0) return; // Exit if no active objects
+
+      activeObjects.forEach((object) => {
+        if (isTextType(object.type)) {
+          const textObject = object as fabric.Textbox;
+          const currentText = textObject.get("text") as string;
+
+          // Check if the text is currently in uppercase, and toggle it
+          const newText =
+            currentText === currentText.toUpperCase()
+              ? currentText.toLowerCase()
+              : currentText.toUpperCase();
+
+          textObject.set({ text: newText });
+        }
+      });
+
+      canvas.renderAll();
+    },
     addStrokeColor: (color: string) => {
       setStrokeColor(color);
       canvas.getActiveObjects().forEach((object) => {
@@ -296,6 +339,42 @@ const createEditor = ({
         );
       }
       return FONT_WEIGHT;
+    },
+    getActiveObjectUnderline: () => {
+      const activeObject = selectedObjects[0];
+
+      if (activeObject && isTextType(activeObject.type)) {
+        return (
+          ((activeObject as fabric.Textbox).get("underline") as boolean) ??
+          false
+        );
+      }
+      return false;
+    },
+    getActiveObjectLineThrough: () => {
+      const activeObject = selectedObjects[0];
+
+      if (activeObject && isTextType(activeObject.type)) {
+        return (
+          ((activeObject as fabric.Textbox).get("linethrough") as boolean) ??
+          false
+        );
+      }
+      return false;
+    },
+    getActiveObjectTextCase: () => {
+      const activeObject = selectedObjects[0];
+
+      if (activeObject && isTextType(activeObject.type)) {
+        const textObject = activeObject as fabric.Textbox;
+        const currentText = textObject.get("text") as string;
+
+        // Check if the text is currently in uppercase
+        return currentText === currentText.toUpperCase()
+          ? "uppercase"
+          : "normal";
+      }
+      return "normal";
     },
     getActiveObjectFontStyle: () => {
       const activeObject = selectedObjects[0];

@@ -8,10 +8,21 @@ import {
 import { Editor, SelectedTool } from "@/features/editor/types";
 import { isTextType } from "@/features/editor/utils";
 import { cn } from "@/lib/utils";
-import { ArrowDownFromLine, ArrowUpFromLine, Bold, Italic } from "lucide-react";
+import {
+  ArrowDownFromLine,
+  ArrowUpFromLine,
+  Bold,
+  Italic,
+  Strikethrough,
+  Underline,
+} from "lucide-react";
 import React from "react";
 import { MdFormatColorText } from "react-icons/md";
-import { RxBorderWidth, RxTransparencyGrid } from "react-icons/rx";
+import {
+  RxBorderWidth,
+  RxLetterCaseUppercase,
+  RxTransparencyGrid,
+} from "react-icons/rx";
 
 type Props = {
   editor: Editor | undefined;
@@ -25,6 +36,12 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
   const [fontWeight, setFontWeight] = React.useState(initialFontWeight);
   const initialFontStyle = editor?.getActiveObjectFontStyle() ?? "normal";
   const [fontStyle, setFontStyle] = React.useState(initialFontStyle);
+  const initialUnderline = editor?.getActiveObjectUnderline() ?? false;
+  const [underline, setUnderline] = React.useState(initialUnderline);
+  const initialLineThrough = editor?.getActiveObjectLineThrough() ?? false;
+  const [lineThrough, setLineThrough] = React.useState(initialLineThrough);
+  const initialTextCase = editor?.getActiveObjectTextCase() ?? "normal";
+  const [textCase, setTextCase] = React.useState(initialTextCase);
 
   // Editor properties don't need local state because they have state in the editor
   const fillColor = editor?.getActiveObjectFillColor() ?? FILL_COLOR;
@@ -48,6 +65,30 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
     editor?.addFontStyle(newFontStyleValue);
     // Update the local state because the state is not saved in the editor
     setFontStyle(newFontStyleValue);
+  };
+
+  const changeUnderline = () => {
+    if (!selectedObject || !isText) return;
+    const newUnderlineValue = !underline;
+    editor?.toggleUnderline();
+    // Update the local state because the state is not saved in the editor
+    setUnderline(newUnderlineValue);
+  };
+
+  const changeLineThrough = () => {
+    if (!selectedObject || !isText) return;
+    const newLineThroughValue = !lineThrough;
+    editor?.toggleLineThrough();
+    // Update the local state because the state is not saved in the editor
+    setLineThrough(newLineThroughValue);
+  };
+
+  const changeTextCase = () => {
+    if (!selectedObject || !isText) return;
+    const newTextCaseValue = textCase === "uppercase" ? "normal" : "uppercase";
+    editor?.toggleCase();
+    // Update the local state because the state is not saved in the editor
+    setTextCase(newTextCaseValue);
   };
 
   if (editor?.selectedObjects.length === 0) {
@@ -125,6 +166,39 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
             className={cn(fontStyle === "italic" ? "bg-neutral-600" : "")}
           >
             <Italic className="size-6" />
+          </Button>
+        )}
+        {/* Underline */}
+        {isText && (
+          <Button
+            variant={"ghost"}
+            size={"icon"}
+            onClick={changeUnderline}
+            className={cn(underline === true ? "bg-neutral-600" : "")}
+          >
+            <Underline className="size-6" />
+          </Button>
+        )}
+        {/* Line through */}
+        {isText && (
+          <Button
+            variant={"ghost"}
+            size={"icon"}
+            onClick={changeLineThrough}
+            className={cn(lineThrough === true ? "bg-neutral-600" : "")}
+          >
+            <Strikethrough className="size-6" />
+          </Button>
+        )}
+        {/* Uppercase */}
+        {isText && (
+          <Button
+            variant={"ghost"}
+            size={"icon"}
+            onClick={changeTextCase}
+            className={cn(textCase === "uppercase" ? "bg-neutral-600" : "")}
+          >
+            <RxLetterCaseUppercase className="size-6" />
           </Button>
         )}
         {!isText && (

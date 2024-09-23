@@ -62,8 +62,14 @@ export type Editor = {
   getActiveObjectStrokeColor: () => string;
   getActiveObjectStrokeWidth: () => number;
   getActiveObjectStrokeDashArray: () => number[];
+  getActiveObjectUnderline: () => boolean;
+  getActiveObjectLineThrough: () => boolean;
+  getActiveObjectTextCase: () => "lowercase" | "uppercase" | "normal";
   strokeColor: string;
   strokeWidth: number;
   selectedObjects: fabric.Object[];
   sendBackwards: () => void;
+  toggleUnderline: () => void;
+  toggleLineThrough: () => void;
+  toggleCase: () => void;
 };
