@@ -35,6 +35,7 @@ export type CreateEditorProps = {
 };
 
 export type Editor = {
+  addFontSize: (fontSize: number) => void;
   addRectangle: () => void;
   addCircle: () => void;
   addText: (text: string, options?: ITextboxOptions) => void;
@@ -66,6 +67,7 @@ export type Editor = {
   getActiveObjectUnderline: () => boolean;
   getActiveObjectLineThrough: () => boolean;
   getActiveObjectTextCase: () => "lowercase" | "uppercase" | "normal";
+  getActiveObjectFontSize: () => number;
   getActiveFontAlign: () => ITextOptions["textAlign"];
   strokeColor: string;
   strokeWidth: number;

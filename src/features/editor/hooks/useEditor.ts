@@ -7,6 +7,7 @@ import {
   DIAMOND_OPTIONS,
   FILL_COLOR,
   FONT_FAMILY,
+  FONT_SIZE,
   FONT_WEIGHT,
   OPACITY,
   PENTAGON_OPTIONS,
@@ -240,6 +241,14 @@ const createEditor = ({
       });
       canvas.renderAll();
     },
+    addFontSize: (fontSize: number) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          (object as fabric.Textbox).set({ fontSize });
+        }
+      });
+      canvas.renderAll();
+    },
     toggleUnderline: () => {
       canvas.getActiveObjects().forEach((object) => {
         if (isTextType(object.type)) {
@@ -360,6 +369,14 @@ const createEditor = ({
         );
       }
       return false;
+    },
+    getActiveObjectFontSize: () => {
+      const activeObject = selectedObjects[0];
+
+      if (activeObject && isTextType(activeObject.type)) {
+        return (activeObject as fabric.Textbox).get("fontSize") ?? FONT_SIZE;
+      }
+      return FONT_SIZE;
     },
     getActiveObjectLineThrough: () => {
       const activeObject = selectedObjects[0];

@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button";
+import StepperInput from "@/components/ui/stepper-input";
 import {
   FILL_COLOR,
   FONT_FAMILY,
+  FONT_SIZE,
   FONT_WEIGHT,
   STROKE_COLOR,
 } from "@/features/editor/constants";
@@ -48,6 +50,8 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
   const [textCase, setTextCase] = React.useState(initialTextCase);
   const initialFontAlign = editor?.getActiveFontAlign() ?? "left";
   const [fontAlign, setFontAlign] = React.useState(initialFontAlign);
+  const initialFontSize = editor?.getActiveObjectFontSize() ?? FONT_SIZE;
+  const [fontSize, setFontSize] = React.useState(initialFontSize);
 
   // Editor properties don't need local state because they have state in the editor
   const fillColor = editor?.getActiveObjectFillColor() ?? FILL_COLOR;
@@ -119,6 +123,13 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
     setFontAlign(newFontAlignValue);
   };
 
+  const changeFontSize = (value: number) => {
+    if (!selectedObject || !isText) return;
+    editor?.addFontSize(value);
+    // Update the local state because the state is not saved in the editor
+    setFontSize(value);
+  };
+
   if (editor?.selectedObjects.length === 0) {
     return <div className="h-10 my-2" />;
   }
@@ -158,6 +169,8 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
             </div>
           </Button>
         )}
+        {/* Font Size */}
+        {isText && <StepperInput value={fontSize} setValue={changeFontSize} />}
         {/* Text Color */}
         {isText && (
           <Button
