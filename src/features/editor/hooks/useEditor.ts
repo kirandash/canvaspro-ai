@@ -18,6 +18,7 @@ import {
 } from "@/features/editor/constants";
 import { useCanvasEvents } from "@/features/editor/hooks/useCanvasEvents";
 import { isTextType } from "@/features/editor/utils";
+import { ITextOptions } from "fabric/fabric-impl";
 
 const createEditor = ({
   canvas,
@@ -222,10 +223,19 @@ const createEditor = ({
       });
       canvas.renderAll();
     },
+    // 🚨 TODO: Use ITextOptions with pick instead
     addFontStyle: (fontStyle: "italic" | "normal") => {
       canvas.getActiveObjects().forEach((object) => {
         if (isTextType(object.type)) {
           (object as fabric.Textbox).set({ fontStyle });
+        }
+      });
+      canvas.renderAll();
+    },
+    addFontAlign: (textAlign: ITextOptions["textAlign"]) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          (object as fabric.Textbox).set({ textAlign });
         }
       });
       canvas.renderAll();
@@ -387,6 +397,14 @@ const createEditor = ({
         );
       }
       return "normal";
+    },
+    getActiveFontAlign: () => {
+      const activeObject = selectedObjects[0];
+
+      if (activeObject && isTextType(activeObject.type)) {
+        return (activeObject as fabric.Textbox).get("textAlign") ?? "left";
+      }
+      return "left";
     },
     getActiveObjectStrokeColor: () => {
       const activeObject = selectedObjects[0];

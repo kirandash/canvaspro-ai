@@ -1,5 +1,5 @@
 import { fabric } from "fabric";
-import { ITextboxOptions } from "fabric/fabric-impl";
+import { ITextboxOptions, ITextOptions } from "fabric/fabric-impl";
 
 export type SelectedTool =
   | "templates"
@@ -53,6 +53,7 @@ export type Editor = {
   addFontFamily: (fontFamily: string) => void;
   addFontWeight: (fontWeight: number) => void;
   addFontStyle: (fontStyle: "italic" | "normal") => void;
+  addFontAlign: (textAlign: ITextOptions["textAlign"]) => void;
   fillColor: string;
   getActiveObjectOpacity: () => number;
   getActiveObjectFillColor: () => string;
@@ -65,6 +66,7 @@ export type Editor = {
   getActiveObjectUnderline: () => boolean;
   getActiveObjectLineThrough: () => boolean;
   getActiveObjectTextCase: () => "lowercase" | "uppercase" | "normal";
+  getActiveFontAlign: () => ITextOptions["textAlign"];
   strokeColor: string;
   strokeWidth: number;
   selectedObjects: fabric.Object[];

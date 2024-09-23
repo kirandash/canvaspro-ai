@@ -9,6 +9,10 @@ import { Editor, SelectedTool } from "@/features/editor/types";
 import { isTextType } from "@/features/editor/utils";
 import { cn } from "@/lib/utils";
 import {
+  AlignCenter,
+  AlignJustify,
+  AlignLeft,
+  AlignRight,
   ArrowDownFromLine,
   ArrowUpFromLine,
   Bold,
@@ -42,6 +46,8 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
   const [lineThrough, setLineThrough] = React.useState(initialLineThrough);
   const initialTextCase = editor?.getActiveObjectTextCase() ?? "normal";
   const [textCase, setTextCase] = React.useState(initialTextCase);
+  const initialFontAlign = editor?.getActiveFontAlign() ?? "left";
+  const [fontAlign, setFontAlign] = React.useState(initialFontAlign);
 
   // Editor properties don't need local state because they have state in the editor
   const fillColor = editor?.getActiveObjectFillColor() ?? FILL_COLOR;
@@ -89,6 +95,23 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
     editor?.toggleCase();
     // Update the local state because the state is not saved in the editor
     setTextCase(newTextCaseValue);
+  };
+
+  const changeFontAlign = () => {
+    if (!selectedObject || !isText) return;
+    let newFontAlignValue;
+    if (fontAlign === "left") {
+      newFontAlignValue = "center";
+    } else if (fontAlign === "center") {
+      newFontAlignValue = "right";
+    } else if (fontAlign === "right") {
+      newFontAlignValue = "justify";
+    } else {
+      newFontAlignValue = "left";
+    }
+    editor?.addFontAlign(newFontAlignValue);
+    // Update the local state because the state is not saved in the editor
+    setFontAlign(newFontAlignValue);
   };
 
   if (editor?.selectedObjects.length === 0) {
@@ -199,6 +222,17 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
             className={cn(textCase === "uppercase" ? "bg-neutral-600" : "")}
           >
             <RxLetterCaseUppercase className="size-6" />
+          </Button>
+        )}
+        {/* Font Align */}
+        {isText && (
+          <Button variant={"ghost"} size={"icon"} onClick={changeFontAlign}>
+            {(() => {
+              if (fontAlign === "left") return <AlignLeft />;
+              if (fontAlign === "center") return <AlignCenter />;
+              if (fontAlign === "right") return <AlignRight />;
+              return <AlignJustify />;
+            })()}
           </Button>
         )}
         {!isText && (
