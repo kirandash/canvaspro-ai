@@ -51,10 +51,12 @@ export type Editor = {
   bringForward: () => void;
   canvas: fabric.Canvas;
   addFontFamily: (fontFamily: string) => void;
+  addFontWeight: (fontWeight: number) => void;
   fillColor: string;
   getActiveObjectOpacity: () => number;
   getActiveObjectFillColor: () => string;
   getActiveObjectFontFamily: () => string;
+  getActiveObjectFontWeight: () => number;
   getActiveObjectStrokeColor: () => string;
   getActiveObjectStrokeWidth: () => number;
   getActiveObjectStrokeDashArray: () => number[];

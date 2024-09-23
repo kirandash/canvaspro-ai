@@ -7,6 +7,7 @@ import {
   DIAMOND_OPTIONS,
   FILL_COLOR,
   FONT_FAMILY,
+  FONT_WEIGHT,
   OPACITY,
   PENTAGON_OPTIONS,
   RECTANGLE_OPTIONS,
@@ -213,6 +214,14 @@ const createEditor = ({
       });
       canvas.renderAll();
     },
+    addFontWeight: (fontWeight: number) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          (object as fabric.Textbox).set({ fontWeight });
+        }
+      });
+      canvas.renderAll();
+    },
     addStrokeColor: (color: string) => {
       setStrokeColor(color);
       canvas.getActiveObjects().forEach((object) => {
@@ -268,6 +277,17 @@ const createEditor = ({
         return (activeObject as fabric.Textbox).get("fontFamily") ?? fontFamily; // active object fill color
       }
       return fillColor;
+    },
+    getActiveObjectFontWeight: () => {
+      const activeObject = selectedObjects[0];
+
+      if (activeObject && isTextType(activeObject.type)) {
+        return (
+          ((activeObject as fabric.Textbox).get("fontWeight") as number) ??
+          FONT_WEIGHT
+        );
+      }
+      return FONT_WEIGHT;
     },
     getActiveObjectStrokeColor: () => {
       const activeObject = selectedObjects[0];

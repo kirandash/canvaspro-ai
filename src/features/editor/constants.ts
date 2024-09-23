@@ -56,6 +56,7 @@ export const STROKE_DASH_ARRAY = [];
 export const OPACITY = 1;
 export const FONT_SIZE = 40;
 export const FONT_FAMILY = "Arial";
+export const FONT_WEIGHT = 400;
 
 export const RECTANGLE_OPTIONS = {
   width: 500,

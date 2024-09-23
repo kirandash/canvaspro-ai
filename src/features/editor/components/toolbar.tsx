@@ -1,9 +1,14 @@
 import { Button } from "@/components/ui/button";
-import { FILL_COLOR, STROKE_COLOR } from "@/features/editor/constants";
+import {
+  FILL_COLOR,
+  FONT_FAMILY,
+  FONT_WEIGHT,
+  STROKE_COLOR,
+} from "@/features/editor/constants";
 import { Editor, SelectedTool } from "@/features/editor/types";
 import { isTextType } from "@/features/editor/utils";
 import { cn } from "@/lib/utils";
-import { ArrowDownFromLine, ArrowUpFromLine } from "lucide-react";
+import { ArrowDownFromLine, ArrowUpFromLine, Bold } from "lucide-react";
 import React from "react";
 import { MdFormatColorText } from "react-icons/md";
 import { RxBorderWidth, RxTransparencyGrid } from "react-icons/rx";
@@ -15,11 +20,25 @@ type Props = {
 };
 
 const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
-  const fillColor = editor?.getActiveObjectFillColor();
-  const strokeColor = editor?.getActiveObjectStrokeColor();
-  const fontFamily = editor?.getActiveObjectFontFamily();
+  // useState to keep track of the font weight because it's not tracked in editor
+  const initialFontWeight = editor?.getActiveObjectFontWeight() ?? FONT_WEIGHT;
+  const [fontWeight, setFontWeight] = React.useState(initialFontWeight);
+
+  // Editor properties don't need local state because they have state in the editor
+  const fillColor = editor?.getActiveObjectFillColor() ?? FILL_COLOR;
+  const strokeColor = editor?.getActiveObjectStrokeColor() ?? STROKE_COLOR;
+  const fontFamily = editor?.getActiveObjectFontFamily() ?? FONT_FAMILY;
+
   const selectedObject = editor?.selectedObjects[0];
   const isText = isTextType(selectedObject?.type);
+
+  const changeFontWeight = () => {
+    if (!selectedObject || !isText) return;
+    const newFontWeightValue = fontWeight > 500 ? 400 : 700;
+    editor?.addFontWeight(newFontWeightValue);
+    // Update the local state because the state is not saved in the editor
+    setFontWeight(newFontWeightValue);
+  };
 
   if (editor?.selectedObjects.length === 0) {
     return <div className="h-10 my-2" />;
@@ -74,6 +93,17 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
                 fill: typeof fillColor === "string" ? fillColor : FILL_COLOR,
               }}
             />
+          </Button>
+        )}
+        {/* Bold */}
+        {isText && (
+          <Button
+            variant={"ghost"}
+            size={"icon"}
+            onClick={changeFontWeight}
+            className={cn(fontWeight > 500 ? "bg-neutral-600" : "")}
+          >
+            <Bold className="size-6" />
           </Button>
         )}
         {!isText && (
