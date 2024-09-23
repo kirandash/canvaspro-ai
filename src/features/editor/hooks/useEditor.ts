@@ -222,6 +222,14 @@ const createEditor = ({
       });
       canvas.renderAll();
     },
+    addFontStyle: (fontStyle: "italic" | "normal") => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          (object as fabric.Textbox).set({ fontStyle });
+        }
+      });
+      canvas.renderAll();
+    },
     addStrokeColor: (color: string) => {
       setStrokeColor(color);
       canvas.getActiveObjects().forEach((object) => {
@@ -288,6 +296,18 @@ const createEditor = ({
         );
       }
       return FONT_WEIGHT;
+    },
+    getActiveObjectFontStyle: () => {
+      const activeObject = selectedObjects[0];
+
+      if (activeObject && isTextType(activeObject.type)) {
+        return (
+          ((activeObject as fabric.Textbox).get("fontStyle") as
+            | "italic"
+            | "normal") ?? "normal"
+        );
+      }
+      return "normal";
     },
     getActiveObjectStrokeColor: () => {
       const activeObject = selectedObjects[0];

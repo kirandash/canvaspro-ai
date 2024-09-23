@@ -52,10 +52,12 @@ export type Editor = {
   canvas: fabric.Canvas;
   addFontFamily: (fontFamily: string) => void;
   addFontWeight: (fontWeight: number) => void;
+  addFontStyle: (fontStyle: "italic" | "normal") => void;
   fillColor: string;
   getActiveObjectOpacity: () => number;
   getActiveObjectFillColor: () => string;
   getActiveObjectFontFamily: () => string;
+  getActiveObjectFontStyle: () => "italic" | "normal";
   getActiveObjectFontWeight: () => number;
   getActiveObjectStrokeColor: () => string;
   getActiveObjectStrokeWidth: () => number;

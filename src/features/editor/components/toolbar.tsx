@@ -8,7 +8,7 @@ import {
 import { Editor, SelectedTool } from "@/features/editor/types";
 import { isTextType } from "@/features/editor/utils";
 import { cn } from "@/lib/utils";
-import { ArrowDownFromLine, ArrowUpFromLine, Bold } from "lucide-react";
+import { ArrowDownFromLine, ArrowUpFromLine, Bold, Italic } from "lucide-react";
 import React from "react";
 import { MdFormatColorText } from "react-icons/md";
 import { RxBorderWidth, RxTransparencyGrid } from "react-icons/rx";
@@ -23,6 +23,8 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
   // useState to keep track of the font weight because it's not tracked in editor
   const initialFontWeight = editor?.getActiveObjectFontWeight() ?? FONT_WEIGHT;
   const [fontWeight, setFontWeight] = React.useState(initialFontWeight);
+  const initialFontStyle = editor?.getActiveObjectFontStyle() ?? "normal";
+  const [fontStyle, setFontStyle] = React.useState(initialFontStyle);
 
   // Editor properties don't need local state because they have state in the editor
   const fillColor = editor?.getActiveObjectFillColor() ?? FILL_COLOR;
@@ -38,6 +40,14 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
     editor?.addFontWeight(newFontWeightValue);
     // Update the local state because the state is not saved in the editor
     setFontWeight(newFontWeightValue);
+  };
+
+  const changeFontStyle = () => {
+    if (!selectedObject || !isText) return;
+    const newFontStyleValue = fontStyle === "italic" ? "normal" : "italic";
+    editor?.addFontStyle(newFontStyleValue);
+    // Update the local state because the state is not saved in the editor
+    setFontStyle(newFontStyleValue);
   };
 
   if (editor?.selectedObjects.length === 0) {
@@ -95,7 +105,7 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
             />
           </Button>
         )}
-        {/* Bold */}
+        {/* Font weight */}
         {isText && (
           <Button
             variant={"ghost"}
@@ -104,6 +114,17 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
             className={cn(fontWeight > 500 ? "bg-neutral-600" : "")}
           >
             <Bold className="size-6" />
+          </Button>
+        )}
+        {/* Font Style */}
+        {isText && (
+          <Button
+            variant={"ghost"}
+            size={"icon"}
+            onClick={changeFontStyle}
+            className={cn(fontStyle === "italic" ? "bg-neutral-600" : "")}
+          >
+            <Italic className="size-6" />
           </Button>
         )}
         {!isText && (
