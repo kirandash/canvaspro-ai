@@ -55,6 +55,7 @@ export type Editor = {
   addFontWeight: (fontWeight: number) => void;
   addFontStyle: (fontStyle: "italic" | "normal") => void;
   addFontAlign: (textAlign: ITextOptions["textAlign"]) => void;
+  deleteObjects: () => void;
   fillColor: string;
   getActiveObjectOpacity: () => number;
   getActiveObjectFillColor: () => string;

@@ -20,6 +20,7 @@ import {
   Bold,
   Italic,
   Strikethrough,
+  Trash2,
   Underline,
 } from "lucide-react";
 import React from "react";
@@ -304,6 +305,13 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
           className={cn(selectedTool === "opacity" ? "bg-neutral-600" : "")}
         >
           <RxTransparencyGrid className="size-6" />
+        </Button>
+        <Button
+          variant={"ghost"}
+          size={"icon"}
+          onClick={() => editor?.deleteObjects()}
+        >
+          <Trash2 className="size-6" />
         </Button>
       </div>
     </div>

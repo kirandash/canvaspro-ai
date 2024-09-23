@@ -249,6 +249,14 @@ const createEditor = ({
       });
       canvas.renderAll();
     },
+    deleteObjects: () => {
+      canvas.getActiveObjects().forEach((object) => {
+        canvas.remove(object);
+      });
+      // Clear the active object
+      canvas.discardActiveObject();
+      canvas.renderAll();
+    },
     toggleUnderline: () => {
       canvas.getActiveObjects().forEach((object) => {
         if (isTextType(object.type)) {
