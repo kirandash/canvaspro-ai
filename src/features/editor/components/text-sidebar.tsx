@@ -29,7 +29,7 @@ const TextSidebar = ({ selectedTool, onChangeSelectedTool, editor }: Props) => {
             className="bg-violet-600 hover:bg-violet-700 text-white flex gap-2"
             onClick={() => {
               editor?.addText("Your paragraph text", {
-                fontSize: 8,
+                fontSize: 38,
               });
             }}
           >
@@ -41,8 +41,8 @@ const TextSidebar = ({ selectedTool, onChangeSelectedTool, editor }: Props) => {
             className="bg-violet-600 hover:bg-violet-700 text-white flex gap-2 text-4xl h-auto"
             onClick={() => {
               editor?.addText("Add a heading", {
-                fontSize: 36,
-                fontWeight: "bold",
+                fontSize: 108,
+                fontWeight: 700,
               });
             }}
           >
@@ -52,12 +52,22 @@ const TextSidebar = ({ selectedTool, onChangeSelectedTool, editor }: Props) => {
             className="bg-violet-600 hover:bg-violet-700 text-white flex gap-2 text-xl h-auto"
             onClick={() => {
               editor?.addText("Add a subheading", {
-                fontSize: 20,
-                fontWeight: "bold",
+                fontSize: 60,
+                fontWeight: 600,
               });
             }}
           >
             Add a subheading
+          </Button>
+          <Button
+            className="bg-violet-600 hover:bg-violet-700 text-white flex gap-2 text-xl h-auto"
+            onClick={() => {
+              editor?.addText("Add a little bit of body text", {
+                fontSize: 48,
+              });
+            }}
+          >
+            Add a little bit of body text
           </Button>
         </div>
         <ScrollBar orientation="horizontal" />
