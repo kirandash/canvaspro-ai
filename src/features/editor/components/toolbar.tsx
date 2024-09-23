@@ -99,16 +99,21 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
 
   const changeFontAlign = () => {
     if (!selectedObject || !isText) return;
-    let newFontAlignValue;
-    if (fontAlign === "left") {
-      newFontAlignValue = "center";
-    } else if (fontAlign === "center") {
-      newFontAlignValue = "right";
-    } else if (fontAlign === "right") {
-      newFontAlignValue = "justify";
-    } else {
-      newFontAlignValue = "left";
-    }
+    // solution 1: to increment through the alignment options
+    // const alignmentOrder = ["left", "center", "right", "justify"];
+    // const currentIndex = alignmentOrder.indexOf(fontAlign);
+    // const newFontAlignValue =
+    //   alignmentOrder[(currentIndex + 1) % alignmentOrder.length];
+    // solution 2: using a dictionary
+    const alignmentOptions = {
+      left: "center",
+      center: "right",
+      right: "justify",
+      justify: "left",
+    } as {
+      [key: string]: string;
+    };
+    const newFontAlignValue = alignmentOptions[fontAlign];
     editor?.addFontAlign(newFontAlignValue);
     // Update the local state because the state is not saved in the editor
     setFontAlign(newFontAlignValue);
