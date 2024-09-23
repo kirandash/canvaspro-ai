@@ -6,6 +6,7 @@ import {
   CIRCLE_OPTIONS,
   DIAMOND_OPTIONS,
   FILL_COLOR,
+  FONT_FAMILY,
   OPACITY,
   PENTAGON_OPTIONS,
   RECTANGLE_OPTIONS,
@@ -20,6 +21,8 @@ import { isTextType } from "@/features/editor/utils";
 const createEditor = ({
   canvas,
   fillColor,
+  fontFamily,
+  setFontFamily,
   strokeColor,
   strokeWidth,
   setFillColor,
@@ -201,6 +204,15 @@ const createEditor = ({
       // This is required to re-render the canvas after changing the fill color
       canvas.renderAll();
     },
+    addFontFamily: (fontFamily: string) => {
+      setFontFamily(fontFamily);
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          (object as fabric.Textbox).set({ fontFamily });
+        }
+      });
+      canvas.renderAll();
+    },
     addStrokeColor: (color: string) => {
       setStrokeColor(color);
       canvas.getActiveObjects().forEach((object) => {
@@ -246,6 +258,14 @@ const createEditor = ({
 
       if (activeObject) {
         return (activeObject.get("fill") as string) ?? fillColor; // active object fill color
+      }
+      return fillColor;
+    },
+    getActiveObjectFontFamily: () => {
+      const activeObject = selectedObjects[0];
+
+      if (activeObject && isTextType(activeObject.type)) {
+        return (activeObject as fabric.Textbox).get("fontFamily") ?? fontFamily; // active object fill color
       }
       return fillColor;
     },
@@ -309,11 +329,13 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
   // 🚨 TODO: Check why "^_" is not being ignored in eslint
   const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([]);
 
+  // Global Properties for the editor
   const [fillColor, setFillColor] = useState<string>(FILL_COLOR);
   const [strokeColor, setStrokeColor] = useState<string>(FILL_COLOR);
   const [strokeWidth, setStrokeWidth] = useState<number>(STROKE_WIDTH);
   const [strokeDashArray, setStrokeDashArray] =
     useState<number[]>(STROKE_DASH_ARRAY);
+  const [fontFamily, setFontFamily] = useState<string>(FONT_FAMILY);
 
   useCanvasEvents({
     canvas,
@@ -331,6 +353,8 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
       return createEditor({
         canvas,
         fillColor,
+        fontFamily,
+        setFontFamily,
         strokeColor,
         strokeWidth,
         setFillColor,
@@ -345,6 +369,7 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
   }, [
     canvas,
     fillColor,
+    fontFamily,
     strokeColor,
     strokeWidth,
     selectedObjects,

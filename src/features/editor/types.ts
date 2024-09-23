@@ -22,6 +22,8 @@ export type SelectedTool =
 export type CreateEditorProps = {
   canvas: fabric.Canvas;
   fillColor: string;
+  fontFamily: string;
+  setFontFamily: (fontFamily: string) => void;
   strokeColor: string;
   strokeWidth: number;
   strokeDashArray: number[];
@@ -48,10 +50,11 @@ export type Editor = {
   addStrokeDashArray: (dashArray: number[]) => void;
   bringForward: () => void;
   canvas: fabric.Canvas;
-
+  addFontFamily: (fontFamily: string) => void;
   fillColor: string;
   getActiveObjectOpacity: () => number;
   getActiveObjectFillColor: () => string;
+  getActiveObjectFontFamily: () => string;
   getActiveObjectStrokeColor: () => string;
   getActiveObjectStrokeWidth: () => number;
   getActiveObjectStrokeDashArray: () => number[];

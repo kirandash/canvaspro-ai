@@ -17,6 +17,7 @@ type Props = {
 const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
   const fillColor = editor?.getActiveObjectFillColor();
   const strokeColor = editor?.getActiveObjectStrokeColor();
+  const fontFamily = editor?.getActiveObjectFontFamily();
   const selectedObject = editor?.selectedObjects[0];
   const isText = isTextType(selectedObject?.type);
 
@@ -27,6 +28,7 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
   return (
     <div className="flex justify-center w-full my-2">
       <div className="shrink-0 h-10 bg-neutral-800 shadow py-1 gap-1 z-50 overflow-x-auto flex items-center min-w-80 rounded-lg justify-center">
+        {/* Fill Color */}
         {!isText && (
           <Button
             variant={"ghost"}
@@ -43,6 +45,22 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
             />
           </Button>
         )}
+        {/* Font Family */}
+        {isText && (
+          <Button
+            variant={"ghost"}
+            onClick={() => onChangeSelectedTool("font")}
+            className={cn(
+              "text-left",
+              selectedTool === "font" ? "bg-neutral-600" : ""
+            )}
+          >
+            <div className="max-w-24 text-ellipsis overflow-hidden text-nowrap">
+              {fontFamily}
+            </div>
+          </Button>
+        )}
+        {/* Text Color */}
         {isText && (
           <Button
             variant={"ghost"}
