@@ -9,7 +9,6 @@ import { cn } from "@/lib/utils";
 import { Circle, CircleAlert, LoaderPinwheel, Square } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 import { FaDiamond } from "react-icons/fa6";
 import { IoTriangle } from "react-icons/io5";
 import { MdHexagon, MdPentagon } from "react-icons/md";
@@ -25,7 +24,7 @@ const ElementsSidebar = ({
   onChangeSelectedTool,
   editor,
 }: Props) => {
-  const { data, isLoading, isError, isPending } = useFetchImages();
+  const { data, isError, isPending } = useFetchImages();
 
   return (
     <aside
@@ -70,6 +69,7 @@ const ElementsSidebar = ({
         <div className="grid grid-cols-3 gap-2 p-4">
           {data?.data.images.map((image, index: number) => (
             <Button
+              key={index}
               className="relative size-[100px] overflow-hidden group"
               onClick={() => editor?.addPhoto(image.urls.regular)}
             >
