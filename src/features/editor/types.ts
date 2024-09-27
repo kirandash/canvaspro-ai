@@ -36,6 +36,7 @@ export type CreateEditorProps = {
 
 export type Editor = {
   addFontSize: (fontSize: number) => void;
+  addPhoto: (url: string) => void;
   addRectangle: () => void;
   addCircle: () => void;
   addText: (text: string, options?: ITextboxOptions) => void;

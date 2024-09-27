@@ -1,11 +1,21 @@
+import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import ElementsSidebarHeader from "@/features/editor/components/elements-sidebar-header";
 import Shape from "@/features/editor/components/shape";
 import ToolSidebarClose from "@/features/editor/components/tool-sidebar-close";
 import { Editor, SelectedTool } from "@/features/editor/types";
+import { useFetchImages } from "@/features/images/api/use-fetch-images";
 import { cn } from "@/lib/utils";
-import { Circle, Square } from "lucide-react";
-import React from "react";
+import {
+  Circle,
+  CircleAlert,
+  CircleX,
+  LoaderPinwheel,
+  Square,
+} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import React, { useState } from "react";
 import { FaDiamond } from "react-icons/fa6";
 import { IoTriangle } from "react-icons/io5";
 import { MdHexagon, MdPentagon } from "react-icons/md";
@@ -21,6 +31,8 @@ const ElementsSidebar = ({
   onChangeSelectedTool,
   editor,
 }: Props) => {
+  const { data, isLoading, isError, isPending } = useFetchImages();
+
   return (
     <aside
       className={cn(
@@ -28,6 +40,7 @@ const ElementsSidebar = ({
         selectedTool === "shapes" ? "visible" : "hidden"
       )}
     >
+      {/* Shapes */}
       <ElementsSidebarHeader title="Shapes" />
       <ScrollArea className="whitespace-nowrap">
         <div className="flex w-max space-x-2 p-4">
@@ -45,6 +58,47 @@ const ElementsSidebar = ({
         </div>
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
+
+      {/* Photos */}
+      <ElementsSidebarHeader title="Photos" />
+      {isPending && (
+        <div className="px-4">
+          <LoaderPinwheel className="animate-spin" />
+        </div>
+      )}
+      {isError && (
+        <div className="px-4 text-red-500 flex gap-1">
+          <CircleAlert />
+          Failed to fetch images
+        </div>
+      )}
+      <ScrollArea className="whitespace-nowrap">
+        <div className="grid grid-cols-3 gap-2 p-4">
+          {data?.data.images.map((image, index: number) => (
+            <Button
+              className="relative size-[100px] overflow-hidden group"
+              onClick={() => editor?.addPhoto(image.urls.regular)}
+            >
+              <Image
+                fill
+                key={index}
+                src={image.urls.small}
+                alt={image.alt_description ?? "Image"}
+                className="rounded-md object-cover"
+              />
+              <Link
+                href={image.links.html}
+                target="_blank"
+                className="absolute left-0 right-0 bottom-0 hover:underline text-xs text-white font-bold opacity-0 group-hover:opacity-100 bg-zinc-700/90 w-full"
+              >
+                {image.user.name}
+              </Link>
+            </Button>
+          ))}
+        </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
+
       <ToolSidebarClose onClick={() => onChangeSelectedTool("select")} />
     </aside>
   );

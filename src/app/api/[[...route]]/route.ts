@@ -1,5 +1,7 @@
 import { Hono } from "hono";
 import { handle } from "hono/vercel";
+import projects from "./projects";
+import images from "./images";
 
 // This indicates runtime of the api
 export const runtime = "edge";
@@ -17,13 +19,11 @@ app.get("/hello", (c) => {
   });
 });
 
-app.get("/hello2", (c) => {
-  return c.json({
-    message: "Hello Next.js 2!",
-  });
-});
+const route = app.route("/images", images).route("/projects", projects);
 
 // Use handle to export the routes
 // Hono overwrites the default export of the file
 export const GET = handle(app);
 export const POST = handle(app);
+
+export type AppType = typeof route;

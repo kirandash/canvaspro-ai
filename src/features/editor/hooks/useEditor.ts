@@ -59,6 +59,24 @@ const createEditor = ({
   };
 
   return {
+    addPhoto: (url: string) => {
+      fabric.Image.fromURL(
+        url,
+        (image) => {
+          const workspace = getWorkSpace();
+
+          // Set the width of the image to the width of the workspace
+          image.scaleToWidth(workspace?.width ?? 0);
+          image.scaleToHeight(workspace?.height ?? 0);
+
+          addObjectToCanvas(image);
+        },
+        // Options to allow cross-origin images on fabric canvas
+        {
+          crossOrigin: "Anonymous",
+        }
+      );
+    },
     addRectangle: () => {
       const rectangleObject = new fabric.Rect({
         ...RECTANGLE_OPTIONS,

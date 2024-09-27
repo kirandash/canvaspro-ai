@@ -109,4 +109,23 @@
   - It's fast
   - It integrates well with NextJS
   - Runs on several runtime environments
-  - we will learn more about rpc routes
+  - we will learn more about RPC routes
+
+## Day 6
+
+### 31. Exploring Hono more in detail and building Photos support with react query, unsplash API
+
+- https://hono.dev/docs/api/routing
+- https://hono.dev/docs/guides/best-practices
+- https://hono.dev/docs/guides/best-practices#building-a-larger-application
+- https://hono.dev/docs/guides/validation
+  - hono has thin minimial validation. so use a third party library for validation like zod
+- https://hono.dev/docs/guides/rpc
+  - don't forget to chain your rpc routes
+    - https://hono.dev/docs/guides/rpc#using-rpc-with-larger-applications
+  - also declare them in a separate variable as `const route =...`
+- https://hono.dev/docs/guides/rpc#client
+- React Query setup with Nextjs
+  - https://tanstack.com/query/latest/docs/framework/react/guides/advanced-ssr#server-components-and-nextjs-app-router
+- create unsplash dev account for third party images
+  - https://unsplash.com/developers
