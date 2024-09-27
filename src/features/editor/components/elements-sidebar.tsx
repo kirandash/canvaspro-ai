@@ -6,16 +6,10 @@ import ToolSidebarClose from "@/features/editor/components/tool-sidebar-close";
 import { Editor, SelectedTool } from "@/features/editor/types";
 import { useFetchImages } from "@/features/images/api/use-fetch-images";
 import { cn } from "@/lib/utils";
-import {
-  Circle,
-  CircleAlert,
-  CircleX,
-  LoaderPinwheel,
-  Square,
-} from "lucide-react";
+import { Circle, CircleAlert, LoaderPinwheel, Square } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 import { FaDiamond } from "react-icons/fa6";
 import { IoTriangle } from "react-icons/io5";
 import { MdHexagon, MdPentagon } from "react-icons/md";

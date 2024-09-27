@@ -1,16 +1,15 @@
 import { SidebarItem } from "@/features/editor/components/sidebar-item";
 import { SelectedTool } from "@/features/editor/types";
 import {
+  CloudUpload,
+  Folder,
   PanelsLeftBottom,
+  PenLine,
+  Settings,
   Shapes,
   Type,
-  CloudUpload,
-  PenLine,
-  Folder,
   Wand,
-  Settings,
 } from "lucide-react";
-import React from "react";
 
 type Props = {
   selectedTool: SelectedTool;
@@ -42,8 +41,8 @@ const Sidebar = ({ selectedTool, onChangeSelectedTool }: Props) => {
         <SidebarItem
           icon={CloudUpload}
           label="Uploads"
-          isActive={selectedTool === "images"}
-          onClick={() => onChangeSelectedTool("images")}
+          isActive={selectedTool === "uploads"}
+          onClick={() => onChangeSelectedTool("uploads")}
         />
         <SidebarItem
           icon={PenLine}

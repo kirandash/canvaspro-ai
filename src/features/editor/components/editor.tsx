@@ -1,21 +1,22 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef } from "react";
-import { useEditor } from "@/features/editor/hooks/useEditor";
-import { fabric } from "fabric";
-import Navbar from "@/features/editor/components/navbar";
-import Sidebar from "@/features/editor/components/sidebar";
-import Toolbar from "@/features/editor/components/toolbar";
-import Footer from "@/features/editor/components/footer";
-import { SelectedTool } from "@/features/editor/types";
-import ElementsSidebar from "@/features/editor/components/elements-sidebar";
-import ColorSidebar from "@/features/editor/components/color-sidebar";
-import { selectionOnlyTools } from "@/features/editor/constants";
 import BorderColorSidebar from "@/features/editor/components/border-color-sidebar";
 import BorderSidebar from "@/features/editor/components/border-sidebar";
-import TransparencySidebar from "@/features/editor/components/transparency-sidebar";
-import TextSidebar from "@/features/editor/components/text-sidebar";
+import ColorSidebar from "@/features/editor/components/color-sidebar";
+import ElementsSidebar from "@/features/editor/components/elements-sidebar";
 import FontSidebar from "@/features/editor/components/font-sidebar";
+import Footer from "@/features/editor/components/footer";
+import Navbar from "@/features/editor/components/navbar";
+import Sidebar from "@/features/editor/components/sidebar";
+import TextSidebar from "@/features/editor/components/text-sidebar";
+import Toolbar from "@/features/editor/components/toolbar";
+import TransparencySidebar from "@/features/editor/components/transparency-sidebar";
+import UploadsSidebar from "@/features/editor/components/uploads-sidebar";
+import { selectionOnlyTools } from "@/features/editor/constants";
+import { useEditor } from "@/features/editor/hooks/useEditor";
+import { SelectedTool } from "@/features/editor/types";
+import { fabric } from "fabric";
+import React, { useCallback, useEffect, useRef } from "react";
 
 const Editor = () => {
   const canvasWrapperRef = useRef<HTMLDivElement>(null);
@@ -108,6 +109,11 @@ const Editor = () => {
           editor={editor}
         />
         <FontSidebar
+          selectedTool={selectedTool}
+          onChangeSelectedTool={onChangeSelectedTool}
+          editor={editor}
+        />
+        <UploadsSidebar
           selectedTool={selectedTool}
           onChangeSelectedTool={onChangeSelectedTool}
           editor={editor}
