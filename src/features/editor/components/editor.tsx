@@ -1,5 +1,6 @@
 "use client";
 
+import AISidebar from "@/features/editor/components/ai-sidebar";
 import BorderColorSidebar from "@/features/editor/components/border-color-sidebar";
 import BorderSidebar from "@/features/editor/components/border-sidebar";
 import ColorSidebar from "@/features/editor/components/color-sidebar";
@@ -120,6 +121,11 @@ const Editor = () => {
           editor={editor}
         />
         <EditImageSidebar
+          selectedTool={selectedTool}
+          onChangeSelectedTool={onChangeSelectedTool}
+          editor={editor}
+        />
+        <AISidebar
           selectedTool={selectedTool}
           onChangeSelectedTool={onChangeSelectedTool}
           editor={editor}

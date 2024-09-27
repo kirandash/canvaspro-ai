@@ -1,7 +1,8 @@
+import replicateai from "@/app/api/[[...route]]/replicateai";
 import { Hono } from "hono";
 import { handle } from "hono/vercel";
-import projects from "./projects";
 import images from "./images";
+import projects from "./projects";
 
 // This indicates runtime of the api
 export const runtime = "edge";
@@ -19,7 +20,10 @@ app.get("/hello", (c) => {
   });
 });
 
-const route = app.route("/images", images).route("/projects", projects);
+const route = app
+  .route("/images", images)
+  .route("/replicate", replicateai)
+  .route("/projects", projects);
 
 // Use handle to export the routes
 // Hono overwrites the default export of the file
