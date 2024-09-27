@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import React from "react";
 import { MdFormatColorText } from "react-icons/md";
+import { RiImageEditLine } from "react-icons/ri";
 import {
   RxBorderWidth,
   RxLetterCaseUppercase,
@@ -61,6 +62,7 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
 
   const selectedObject = editor?.selectedObjects[0];
   const isText = isTextType(selectedObject?.type);
+  const isImage = selectedObject?.type === "image";
 
   const changeFontWeight = () => {
     if (!selectedObject || !isText) return;
@@ -139,7 +141,7 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
     <div className="flex justify-center w-full my-2">
       <div className="shrink-0 h-10 bg-neutral-800 shadow py-1 gap-1 z-50 overflow-x-auto flex items-center min-w-80 rounded-lg justify-center">
         {/* Fill Color */}
-        {!isText && (
+        {!isText && !isImage && (
           <Button
             variant={"ghost"}
             size={"icon"}
@@ -272,6 +274,19 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
             />
           </Button>
         )}
+        {isImage && (
+          <Button
+            size={"icon"}
+            variant={"ghost"}
+            onClick={() => onChangeSelectedTool("edit-image")}
+            className={cn(
+              selectedTool === "edit-image" ? "bg-neutral-600" : ""
+            )}
+          >
+            <RiImageEditLine className="size-6" />
+          </Button>
+        )}
+        {/* Stroke Width */}
         {!isText && (
           <Button
             variant={"ghost"}

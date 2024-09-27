@@ -17,7 +17,7 @@ export type SelectedTool =
   | "stroke-color"
   | "font"
   | "opacity"
-  | "filter";
+  | "edit-image";
 
 export type CreateEditorProps = {
   canvas: fabric.Canvas;
@@ -35,6 +35,7 @@ export type CreateEditorProps = {
 };
 
 export type Editor = {
+  addImageFilter: (filter: string) => void;
   addFontSize: (fontSize: number) => void;
   addPhoto: (url: string) => void;
   addRectangle: () => void;
@@ -71,6 +72,7 @@ export type Editor = {
   getActiveObjectTextCase: () => "lowercase" | "uppercase" | "normal";
   getActiveObjectFontSize: () => number;
   getActiveFontAlign: () => ITextOptions["textAlign"];
+  // getActiveObjectImageFilters: () => IBaseFilter[];
   strokeColor: string;
   strokeWidth: number;
   selectedObjects: fabric.Object[];

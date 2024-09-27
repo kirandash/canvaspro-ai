@@ -1,7 +1,3 @@
-import { useCallback, useMemo, useState } from "react";
-import { fabric } from "fabric";
-import { useAutoResize } from "./useAutoResize";
-import { CreateEditorProps, Editor } from "@/features/editor/types";
 import {
   CIRCLE_OPTIONS,
   DIAMOND_OPTIONS,
@@ -18,8 +14,12 @@ import {
   TRIANGLE_OPTIONS,
 } from "@/features/editor/constants";
 import { useCanvasEvents } from "@/features/editor/hooks/useCanvasEvents";
-import { isTextType } from "@/features/editor/utils";
+import { CreateEditorProps, Editor } from "@/features/editor/types";
+import { generateFilter, isTextType } from "@/features/editor/utils";
+import { fabric } from "fabric";
 import { ITextOptions } from "fabric/fabric-impl";
+import { useCallback, useMemo, useState } from "react";
+import { useAutoResize } from "./useAutoResize";
 
 const createEditor = ({
   canvas,
@@ -59,6 +59,24 @@ const createEditor = ({
   };
 
   return {
+    addImageFilter: (filter: string) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (object.type === "image") {
+          const imageObject = object as fabric.Image;
+
+          const effect = generateFilter(filter);
+
+          // Assign multiple filters to the image
+          // imageObject.filters?.push(effect);
+
+          // Assign individual filters to the image
+          imageObject.filters = effect ? [effect] : [];
+          // Apply the filters to the image
+          imageObject.applyFilters();
+        }
+      });
+      canvas.renderAll();
+    },
     addPhoto: (url: string) => {
       fabric.Image.fromURL(
         url,
@@ -481,6 +499,15 @@ const createEditor = ({
       }
       return 1;
     },
+    // getActiveObjectImageFilters: () => {
+    //   const activeObject = selectedObjects[0];
+    //   console.log("activeObject", activeObject as fabric.Image);
+
+    //   if (activeObject && activeObject.type === "image") {
+    //     return (activeObject as fabric.Image).get("filters") ?? [];
+    //   }
+    //   return [];
+    // },
     strokeColor,
     strokeWidth,
     selectedObjects,

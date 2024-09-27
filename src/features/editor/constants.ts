@@ -39,6 +39,32 @@ export const colors = [
   "transparent",
 ];
 
+export const filters = [
+  "mono",
+  "Polaroid",
+  "technicolor",
+  "sepia",
+  "kodachrome",
+  "brightness",
+  "contrast",
+  "brownie",
+  "vintage",
+  "pixelate",
+  "blur",
+  "sharpen",
+  "emboss",
+  "invert",
+  "remove-color",
+  // "gamma",
+  "blacknwhite",
+  "blend-color",
+  "vibrance",
+  "huerotate",
+  "noise",
+  // "gradient-transparency",
+  "resize",
+];
+
 export const selectionOnlyTools = [
   "fill",
   "stroke-width",

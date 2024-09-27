@@ -3,6 +3,7 @@
 import BorderColorSidebar from "@/features/editor/components/border-color-sidebar";
 import BorderSidebar from "@/features/editor/components/border-sidebar";
 import ColorSidebar from "@/features/editor/components/color-sidebar";
+import EditImageSidebar from "@/features/editor/components/edit-image-sidebar";
 import ElementsSidebar from "@/features/editor/components/elements-sidebar";
 import FontSidebar from "@/features/editor/components/font-sidebar";
 import Footer from "@/features/editor/components/footer";
@@ -114,6 +115,11 @@ const Editor = () => {
           editor={editor}
         />
         <UploadsSidebar
+          selectedTool={selectedTool}
+          onChangeSelectedTool={onChangeSelectedTool}
+          editor={editor}
+        />
+        <EditImageSidebar
           selectedTool={selectedTool}
           onChangeSelectedTool={onChangeSelectedTool}
           editor={editor}
