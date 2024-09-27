@@ -22,18 +22,18 @@ export const generateFilter = (filter: string) => {
       effect = new fabric.Image.filters.Grayscale();
       break;
     case "Polaroid":
-      // @ts-ignore
+      // @ts-expect-error: Polaroid is not in the TypeScript definitions
       effect = new fabric.Image.filters.Polaroid();
       break;
     case "technicolor":
-      // @ts-ignore
+      // @ts-expect-error: Technicolor is not in the TypeScript definitions
       effect = new fabric.Image.filters.Technicolor();
       break;
     case "sepia":
       effect = new fabric.Image.filters.Sepia();
       break;
     case "kodachrome":
-      // @ts-ignore
+      // @ts-expect-error: Kodachrome is not in the TypeScript definitions
       effect = new fabric.Image.filters.Kodachrome();
       break;
     case "brightness":
@@ -43,11 +43,11 @@ export const generateFilter = (filter: string) => {
       effect = new fabric.Image.filters.Contrast({ contrast: 0.4 });
       break;
     case "brownie":
-      // @ts-ignore
+      // @ts-expect-error: Brownie is not in the TypeScript definitions
       effect = new fabric.Image.filters.Brownie();
       break;
     case "vintage":
-      // @ts-ignore
+      // @ts-expect-error: Vintage is not in the TypeScript definitions
       effect = new fabric.Image.filters.Vintage();
       break;
     case "pixelate":
@@ -75,20 +75,20 @@ export const generateFilter = (filter: string) => {
       effect = new fabric.Image.filters.Invert();
       break;
     case "remove-color":
-      // @ts-ignore
+      // @ts-expect-error: RemoveColor is not in the TypeScript definitions
       effect = new fabric.Image.filters.RemoveColor({
         distance: 0.6,
         threshold: 0.2,
       });
       break;
     // case "gamma":
-    //   // @ts-ignore
+    //   // @ts-expect-error: Gamma is not in the TypeScript definitions
     //   effect = new fabric.Image.filters.Gamma({
     //     gamma: 0.5,
     //   });
     //   break;
     case "blacknwhite":
-      // @ts-ignore
+      // @ts-expect-error: BlackWhite is not in the TypeScript definitions
       effect = new fabric.Image.filters.BlackWhite();
       break;
     case "blend-color":
@@ -98,7 +98,7 @@ export const generateFilter = (filter: string) => {
       });
       break;
     case "vibrance":
-      // @ts-ignore
+      // @ts-expect-error: Vibrance is not in the TypeScript definitions
       effect = new fabric.Image.filters.Vibrance({
         vibrance: 1,
       });
