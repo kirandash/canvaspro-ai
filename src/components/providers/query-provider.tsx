@@ -8,8 +8,6 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { useSearchParams } from "next/navigation";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -45,14 +43,8 @@ export default function QueryProvider({ children }: { children: ReactNode }) {
   //       suspend because React will throw away the client on the initial
   //       render if it suspends and there is no boundary
   const queryClient = getQueryClient();
-  const searchParams = useSearchParams();
-  const rqDevTools = searchParams?.get("rqDevTools");
 
   return (
-    <QueryClientProvider client={queryClient}>
-      {children}
-      {/* 🚨 TODO: Fix this for editor route */}
-      {rqDevTools === "true" && <ReactQueryDevtools initialIsOpen={true} />}
-    </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
 }
