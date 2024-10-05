@@ -115,4 +115,9 @@ export type Editor = {
   canUndo: () => boolean;
   undo: () => void;
   redo: () => void;
+  exportPng: () => void;
+  exportJpg: () => void;
+  exportSvg: () => void;
+  exportJson: () => void;
+  importJson: (jsonString: string) => void;
 };

@@ -1,19 +1,16 @@
 import { OPACITY } from "@/features/editor/constants";
 import { fabric } from "fabric";
 import { RGBColor } from "react-color";
+import { uuid } from "uuidv4";
 
-export function isTextType(type: string | undefined) {
-  return type === "text" || type === "i-text" || type === "textbox";
-}
-
-export function rgbaObjectToString(color: RGBColor | "transparent") {
-  if (color === "transparent") {
-    return `rgba(0, 0, 0, 0)`;
-  }
-  const alpha = color.a ?? OPACITY;
-
-  return `rgba(${color.r}, ${color.g}, ${color.b}, ${alpha})`;
-}
+export const downloadURI = (uri: string, extension: string) => {
+  const link = document.createElement("a");
+  link.download = `${uuid()}.${extension}`;
+  link.href = uri;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
 
 export const generateFilter = (filter: string) => {
   let effect;
@@ -129,4 +126,31 @@ export const generateFilter = (filter: string) => {
   }
 
   return effect;
+};
+
+export function isTextType(type: string | undefined) {
+  return type === "text" || type === "i-text" || type === "textbox";
+}
+
+export function rgbaObjectToString(color: RGBColor | "transparent") {
+  if (color === "transparent") {
+    return `rgba(0, 0, 0, 0)`;
+  }
+  const alpha = color.a ?? OPACITY;
+
+  return `rgba(${color.r}, ${color.g}, ${color.b}, ${alpha})`;
+}
+
+// This function is used to transform the text object to textbox object
+export const transformText = (objects: any) => {
+  if (!objects) return;
+
+  objects.forEach((object: any) => {
+    // This is recursively calling the function to transform the text
+    if (object.objects) {
+      transformText(object.objects);
+    } else {
+      object.type === "text" && (object.type = "textbox");
+    }
+  });
 };

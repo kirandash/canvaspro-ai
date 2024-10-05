@@ -21,8 +21,14 @@ import { useCanvasEvents } from "@/features/editor/hooks/useCanvasEvents";
 import { useClipboard } from "@/features/editor/hooks/useClipboard";
 import { useHistory } from "@/features/editor/hooks/useHistory";
 import { useHotkeys } from "@/features/editor/hooks/useHotkeys";
+import { useWindowEvents } from "@/features/editor/hooks/useWindowEvents";
 import { CreateEditorProps, Editor } from "@/features/editor/types";
-import { generateFilter, isTextType } from "@/features/editor/utils";
+import {
+  downloadURI,
+  generateFilter,
+  isTextType,
+  transformText,
+} from "@/features/editor/utils";
 import { fabric } from "fabric";
 import { ITextOptions } from "fabric/fabric-impl";
 import { useCallback, useMemo, useState } from "react";
@@ -56,6 +62,65 @@ const createEditor = ({
   workspaceBackgroundColor,
   setWorkspaceBackgroundColor,
 }: CreateEditorProps): Editor => {
+  const generateExportOptions = () => {
+    const { width, height, top, left } = getWorkspace() as fabric.Rect;
+    return {
+      format: "png",
+      quality: 1,
+      multiplier: 2,
+      left: left,
+      top: top,
+      width,
+      height,
+    };
+  };
+
+  const exportPng = () => {
+    const options = generateExportOptions();
+    // [a, b, c, d, e, f] represent the transformation parameters.
+    // No scaling a, d (everything is at its original size),
+    // No skewing, b, c
+    // No translation (the canvas is not moved) e, f
+    canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+    const dataUrl = canvas.toDataURL(options);
+    downloadURI(dataUrl, "png");
+  };
+
+  const exportJpg = () => {
+    const options = generateExportOptions();
+    canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+    const dataUrl = canvas.toDataURL(options);
+    downloadURI(dataUrl, "jpg");
+  };
+
+  // 🚨 TODO: SVG Export not working
+  const exportSvg = () => {
+    const options = generateExportOptions();
+    canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+    const dataUrl = canvas.toDataURL(options);
+    downloadURI(dataUrl, "svg");
+  };
+
+  const exportJson = () => {
+    const dataUrl = canvas.toJSON(CANVAS_JSON_KEYS);
+    // Transform the text objects to textarea so that no data is lost when importing the JSON
+    transformText(dataUrl.objects);
+    const fileString = `data:text/json;charset=utf-8,${encodeURIComponent(
+      JSON.stringify(dataUrl, null, "\t")
+    )}`;
+    downloadURI(fileString, "json");
+  };
+
+  const importJson = (jsonString: string) => {
+    const data = JSON.parse(jsonString);
+
+    canvas.loadFromJSON(data, () => {
+      canvas.renderAll();
+      // reset the zoom level
+      autoZoom();
+    });
+  };
+
   const getWorkspace = () => {
     return canvas
       .getObjects()
@@ -95,6 +160,11 @@ const createEditor = ({
     canUndo,
     undo,
     redo,
+    exportPng,
+    exportJpg,
+    exportSvg,
+    exportJson,
+    importJson,
     getWorkspace,
     copy: () => copy(),
     paste: () => paste(),
@@ -694,6 +764,8 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
     setSelectedObjects,
     selectionClearedCallback,
   });
+  // 🚨 TODO: Show it only if data is not saved in BE. We will do it in future live stream
+  useWindowEvents();
 
   const { autoZoom } = useAutoResize({
     canvasWrapper,

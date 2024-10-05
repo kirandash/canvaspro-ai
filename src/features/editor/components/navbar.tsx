@@ -21,6 +21,7 @@ import {
   Undo2,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { useFilePicker } from "use-file-picker";
 
 type Props = {
   selectedTool: SelectedTool;
@@ -30,6 +31,20 @@ type Props = {
 
 const Navbar = ({ selectedTool, onChangeSelectedTool, editor }: Props) => {
   const workspace = editor?.getWorkspace();
+  const { openFilePicker } = useFilePicker({
+    accept: ".json",
+    onFilesSuccessfullySelected: ({ plainFiles }: any) => {
+      if (plainFiles && plainFiles.length > 0) {
+        const file = plainFiles[0];
+        const reader = new FileReader();
+        reader.readAsText(file, "UTF-8");
+        reader.onload = (e) => {
+          const content = e.target?.result;
+          editor?.importJson(content as string);
+        };
+      }
+    },
+  });
 
   const initialCanvasWidth = useMemo(() => {
     return workspace?.width;
@@ -70,23 +85,38 @@ const Navbar = ({ selectedTool, onChangeSelectedTool, editor }: Props) => {
               Graphic Design Saas Platform YouTube Thumbnail
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="flex gap-2 cursor-pointer">
+            <DropdownMenuItem
+              className="flex gap-2 cursor-pointer"
+              onClick={() => openFilePicker()}
+            >
               <CloudDownload />
               Import JSON file
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex gap-2 cursor-pointer">
+            <DropdownMenuItem
+              className="flex gap-2 cursor-pointer"
+              onClick={() => editor?.exportJson()}
+            >
               <CloudUpload />
               Export JSON file
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex gap-2 cursor-pointer">
+            <DropdownMenuItem
+              className="flex gap-2 cursor-pointer"
+              onClick={() => editor?.exportJpg()}
+            >
               <FileImage />
               Export JPG
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex gap-2 cursor-pointer">
+            <DropdownMenuItem
+              className="flex gap-2 cursor-pointer"
+              onClick={() => editor?.exportPng()}
+            >
               <FileImage />
               Export PNG
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex gap-2 cursor-pointer">
+            <DropdownMenuItem
+              className="flex gap-2 cursor-pointer"
+              onClick={() => editor?.exportSvg()}
+            >
               <FileImage />
               Export SVG
             </DropdownMenuItem>
