@@ -85,6 +85,25 @@ const createEditor = ({
     getWorkspace,
     copy: () => copy(),
     paste: () => paste(),
+    zoomIn: () => {
+      const zoomRatio = canvas.getZoom() * 1.1;
+      const center = canvas.getCenter();
+      // zoom limit to 52% of the original size
+      canvas.zoomToPoint(
+        new fabric.Point(center.left, center.top),
+        zoomRatio > 0.52 ? 0.52 : zoomRatio
+      );
+    },
+    zoomOut: () => {
+      const zoomRatio = canvas.getZoom() / 1.1;
+      const center = canvas.getCenter();
+      // zoom limit to 10% of the original size
+      canvas.zoomToPoint(
+        new fabric.Point(center.left, center.top),
+        zoomRatio < 0.1 ? 0.1 : zoomRatio
+      );
+    },
+    autoZoom,
     resizeCanvas: (width, height) => {
       const workspace = getWorkspace();
 

@@ -44,6 +44,7 @@ export type CreateEditorProps = {
 };
 
 export type Editor = {
+  autoZoom: () => void;
   getWorkspace: () => fabric.Object | undefined;
   copy: () => void;
   paste: () => void;
@@ -103,4 +104,6 @@ export type Editor = {
   toggleCase: () => void;
   workspaceBackgroundColor: string;
   addWorkspaceBackgroundColor: (color: string) => void;
+  zoomIn: () => void;
+  zoomOut: () => void;
 };

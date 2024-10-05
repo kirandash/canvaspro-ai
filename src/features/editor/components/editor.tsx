@@ -160,7 +160,7 @@ const Editor = () => {
             {/* Canvas resizing is difficult hence we are using a div as canvasWrapperRef and we will use a resize observer to see if canvasWrapperRef is resized and use the width and height from there to set width and height of canvas */}
             <canvas ref={canvasRef} />
           </div>
-          <Footer />
+          <Footer editor={editor} />
         </main>
       </div>
     </div>
