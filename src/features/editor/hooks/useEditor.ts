@@ -20,6 +20,7 @@ import {
 import { useCanvasEvents } from "@/features/editor/hooks/useCanvasEvents";
 import { useClipboard } from "@/features/editor/hooks/useClipboard";
 import { useHistory } from "@/features/editor/hooks/useHistory";
+import { useHotkeys } from "@/features/editor/hooks/useHotkeys";
 import { CreateEditorProps, Editor } from "@/features/editor/types";
 import { generateFilter, isTextType } from "@/features/editor/utils";
 import { fabric } from "fabric";
@@ -679,7 +680,14 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
     useHistory({
       canvas,
     });
-
+  useHotkeys({
+    canvas,
+    copy,
+    paste,
+    undo,
+    redo,
+    save,
+  });
   useCanvasEvents({
     save,
     canvas,
