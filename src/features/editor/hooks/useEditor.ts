@@ -298,6 +298,35 @@ const createEditor = ({
       canvas.discardActiveObject();
       canvas.renderAll();
     },
+    lockObjects: () => {
+      canvas.getActiveObjects().forEach((object) => {
+        object.set({
+          lockMovementX: true,
+          lockMovementY: true,
+          lockRotation: true,
+          lockScalingX: true,
+          lockScalingY: true,
+          lockSkewingX: true,
+          lockSkewingY: true,
+        });
+      });
+      canvas.discardActiveObject(); // Deselect objects after locking
+      canvas.renderAll();
+    },
+    unlockObjects: () => {
+      canvas.getActiveObjects().forEach((object) => {
+        object.set({
+          lockMovementX: false,
+          lockMovementY: false,
+          lockRotation: false,
+          lockScalingX: false,
+          lockScalingY: false,
+          lockSkewingX: false,
+          lockSkewingY: false,
+        });
+      });
+      canvas.renderAll();
+    },
     toggleUnderline: () => {
       canvas.getActiveObjects().forEach((object) => {
         if (isTextType(object.type)) {

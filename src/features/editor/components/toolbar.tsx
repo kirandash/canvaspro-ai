@@ -22,6 +22,8 @@ import {
   CopyPlus,
   Crown,
   Italic,
+  LockKeyhole,
+  LockKeyholeOpen,
   Strikethrough,
   Trash2,
   Underline,
@@ -366,6 +368,22 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
           onClick={() => editor?.deleteObjects()}
         >
           <Trash2 className="size-6" />
+        </Button>
+        {/* Lock Object */}
+        <Button
+          variant={"ghost"}
+          size={"icon"}
+          onClick={() => editor?.lockObjects()}
+        >
+          <LockKeyhole className="size-6" />
+        </Button>
+        {/* Unlock Object */}
+        <Button
+          variant={"ghost"}
+          size={"icon"}
+          onClick={() => editor?.unlockObjects()}
+        >
+          <LockKeyholeOpen className="size-6" />
         </Button>
       </div>
     </div>
