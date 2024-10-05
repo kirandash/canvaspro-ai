@@ -19,6 +19,7 @@ import {
   ArrowDownFromLine,
   ArrowUpFromLine,
   Bold,
+  CopyPlus,
   Crown,
   Italic,
   Strikethrough,
@@ -347,6 +348,18 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
         >
           <RxTransparencyGrid className="size-6" />
         </Button>
+        {/* Duplicate Object */}
+        <Button
+          variant={"ghost"}
+          size={"icon"}
+          onClick={() => {
+            editor?.copy();
+            editor?.paste();
+          }}
+        >
+          <CopyPlus className="size-6" />
+        </Button>
+        {/* Delete Object */}
         <Button
           variant={"ghost"}
           size={"icon"}

@@ -14,6 +14,7 @@ import {
   TRIANGLE_OPTIONS,
 } from "@/features/editor/constants";
 import { useCanvasEvents } from "@/features/editor/hooks/useCanvasEvents";
+import { useClipboard } from "@/features/editor/hooks/useClipboard";
 import { CreateEditorProps, Editor } from "@/features/editor/types";
 import { generateFilter, isTextType } from "@/features/editor/utils";
 import { fabric } from "fabric";
@@ -34,6 +35,8 @@ const createEditor = ({
   selectedObjects,
   strokeDashArray,
   setStrokeDashArray,
+  copy,
+  paste,
 }: CreateEditorProps): Editor => {
   const getWorkSpace = () => {
     return canvas
@@ -59,6 +62,8 @@ const createEditor = ({
   };
 
   return {
+    copy: () => copy(),
+    paste: () => paste(),
     addImageFilter: (filter: string) => {
       canvas.getActiveObjects().forEach((object) => {
         if (object.type === "image") {
@@ -543,6 +548,7 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
   const [strokeDashArray, setStrokeDashArray] =
     useState<number[]>(STROKE_DASH_ARRAY);
   const [fontFamily, setFontFamily] = useState<string>(FONT_FAMILY);
+  const { copy, paste } = useClipboard({ canvas });
 
   useCanvasEvents({
     canvas,
@@ -570,6 +576,8 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
         selectedObjects,
         strokeDashArray,
         setStrokeDashArray,
+        copy,
+        paste,
       });
     }
     return undefined;
@@ -581,6 +589,8 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
     strokeWidth,
     selectedObjects,
     strokeDashArray,
+    copy,
+    paste,
   ]);
 
   const init = useCallback(

@@ -31,9 +31,13 @@ export type CreateEditorProps = {
   setStrokeWidth: (width: number) => void;
   setStrokeDashArray: (dashArray: number[]) => void;
   selectedObjects: fabric.Object[];
+  copy: () => void;
+  paste: () => void;
 };
 
 export type Editor = {
+  copy: () => void;
+  paste: () => void;
   addImageFilter: (filter: string) => void;
   addFontSize: (fontSize: number) => void;
   addPhoto: (url: string) => void;
