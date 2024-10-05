@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import StepperInput from "@/components/ui/stepper-input";
+import { useRemoveBackground } from "@/features/ai/api/use-remove-background";
 import {
   FILL_COLOR,
   FONT_FAMILY,
@@ -18,6 +19,7 @@ import {
   ArrowDownFromLine,
   ArrowUpFromLine,
   Bold,
+  Crown,
   Italic,
   Strikethrough,
   Trash2,
@@ -63,6 +65,17 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
   const selectedObject = editor?.selectedObjects[0];
   const isText = isTextType(selectedObject?.type);
   const isImage = selectedObject?.type === "image";
+
+  // @ts-expect-error - currentSrc is not in the type definition
+  const currentImageSrc = selectedObject?._originalElement?.currentSrc;
+  const mutation = useRemoveBackground();
+
+  const onRemoveBackground = async () => {
+    mutation.mutateAsync({ image: currentImageSrc }).then(({ data }) => {
+      // 🚨 TODO: Instead of adding new photo replace the existing photo
+      editor?.addPhoto(data);
+    });
+  };
 
   const changeFontWeight = () => {
     if (!selectedObject || !isText) return;
@@ -274,6 +287,19 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
             />
           </Button>
         )}
+        {/* Edit Image */}
+        {isImage && (
+          <Button
+            variant={"ghost"}
+            onClick={() => onRemoveBackground()}
+            className={cn("flex gap-1")}
+            disabled={mutation.isPending}
+          >
+            BG Remover
+            <Crown className="size-3 fill-zinc-300" />
+          </Button>
+        )}
+        {/* BG Remover */}
         {isImage && (
           <Button
             size={"icon"}

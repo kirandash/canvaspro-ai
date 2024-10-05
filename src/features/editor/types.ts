@@ -8,7 +8,6 @@ export type SelectedTool =
   | "settings"
   | "projects"
   | "ai"
-  | "remove-bg"
   | "select"
   | "draw"
   | "fill"
