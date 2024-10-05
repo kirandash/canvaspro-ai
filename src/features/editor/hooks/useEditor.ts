@@ -14,6 +14,7 @@ import {
   STROKE_WIDTH,
   TEXT_OPTIONS,
   TRIANGLE_OPTIONS,
+  WORKSPACE_BACKGROUND_COLOR,
 } from "@/features/editor/constants";
 import { useCanvasEvents } from "@/features/editor/hooks/useCanvasEvents";
 import { useClipboard } from "@/features/editor/hooks/useClipboard";
@@ -25,6 +26,7 @@ import { useCallback, useMemo, useState } from "react";
 import { useAutoResize } from "./useAutoResize";
 
 const createEditor = ({
+  autoZoom,
   canvas,
   fillColor,
   fontFamily,
@@ -43,15 +45,17 @@ const createEditor = ({
   setBrushWidth,
   copy,
   paste,
+  workspaceBackgroundColor,
+  setWorkspaceBackgroundColor,
 }: CreateEditorProps): Editor => {
-  const getWorkSpace = () => {
+  const getWorkspace = () => {
     return canvas
       .getObjects()
       .find((object) => object.name === "defaultCanvasWorkspace");
   };
 
   const centerObject = (object: fabric.Object) => {
-    const workspace = getWorkSpace();
+    const workspace = getWorkspace();
     const workspaceCenter = workspace?.getCenterPoint();
     if (!workspaceCenter) return;
     // Use _centerObject to center the object properly in the workspace. Note that centerObject does not work as expected if sidebar is open as the center point has changed after opening the sidebar. centerObject does not accept a second argument so we use _centerObject instead
@@ -68,8 +72,27 @@ const createEditor = ({
   };
 
   return {
+    workspaceBackgroundColor,
+    addWorkspaceBackgroundColor: (color: string) => {
+      setWorkspaceBackgroundColor(color);
+      const workspace = getWorkspace();
+
+      if (workspace) {
+        workspace.set({ fill: color });
+        canvas.renderAll();
+      }
+    },
+    getWorkspace,
     copy: () => copy(),
     paste: () => paste(),
+    resizeCanvas: (width, height) => {
+      const workspace = getWorkspace();
+
+      if (workspace) {
+        workspace.set({ width, height });
+        autoZoom();
+      }
+    },
     addImageFilter: (filter: string) => {
       canvas.getActiveObjects().forEach((object) => {
         if (object.type === "image") {
@@ -92,7 +115,7 @@ const createEditor = ({
       fabric.Image.fromURL(
         url,
         (image) => {
-          const workspace = getWorkSpace();
+          const workspace = getWorkspace();
 
           // Set the width of the image to the width of the workspace
           image.scaleToWidth(workspace?.width ?? 0);
@@ -577,7 +600,7 @@ const createEditor = ({
         canvas.sendBackwards(object);
       });
       canvas.renderAll();
-      const workspace = getWorkSpace();
+      const workspace = getWorkspace();
       if (workspace) {
         workspace.sendToBack();
       }
@@ -607,6 +630,8 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
   const { copy, paste } = useClipboard({ canvas });
   const [brushColor, setBrushColor] = useState<string>(BRUSH_COLOR);
   const [brushWidth, setBrushWidth] = useState<number>(BRUSH_WIDTH);
+  const [workspaceBackgroundColor, setWorkspaceBackgroundColor] =
+    useState<string>(WORKSPACE_BACKGROUND_COLOR);
 
   useCanvasEvents({
     canvas,
@@ -614,7 +639,7 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
     selectionClearedCallback,
   });
 
-  useAutoResize({
+  const { autoZoom } = useAutoResize({
     canvasWrapper,
     canvas,
   });
@@ -622,6 +647,7 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
   const editor = useMemo(() => {
     if (canvas) {
       return createEditor({
+        autoZoom,
         canvas,
         fillColor,
         fontFamily,
@@ -640,10 +666,13 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
         setBrushWidth,
         copy,
         paste,
+        workspaceBackgroundColor,
+        setWorkspaceBackgroundColor,
       });
     }
     return undefined;
   }, [
+    autoZoom,
     canvas,
     fillColor,
     fontFamily,
@@ -655,6 +684,8 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
     strokeDashArray,
     copy,
     paste,
+    workspaceBackgroundColor,
+    setWorkspaceBackgroundColor,
   ]);
 
   const init = useCallback(
@@ -683,8 +714,10 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
         width: 1080,
         height: 1920,
         name: "defaultCanvasWorkspace",
-        fill: "white",
-        selectable: false,
+        fill: WORKSPACE_BACKGROUND_COLOR,
+        selectable: true,
+        lockMovementX: true,
+        lockMovementY: true,
         hasControls: false,
         shadow: new fabric.Shadow({
           color: "rgba(0,0,0,0.3)",

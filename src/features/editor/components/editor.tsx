@@ -15,6 +15,7 @@ import TextSidebar from "@/features/editor/components/text-sidebar";
 import Toolbar from "@/features/editor/components/toolbar";
 import TransparencySidebar from "@/features/editor/components/transparency-sidebar";
 import UploadsSidebar from "@/features/editor/components/uploads-sidebar";
+import WorkspaceBackgroundColorSidebar from "@/features/editor/components/workspace-color-sidebar";
 import { selectionOnlyTools } from "@/features/editor/constants";
 import { useEditor } from "@/features/editor/hooks/useEditor";
 import { SelectedTool } from "@/features/editor/types";
@@ -77,6 +78,7 @@ const Editor = () => {
       <Navbar
         selectedTool={selectedTool}
         onChangeSelectedTool={onChangeSelectedTool}
+        editor={editor}
       />
       <div className="flex absolute h-[calc(100%-56px)] w-full top-14">
         <Sidebar
@@ -134,6 +136,11 @@ const Editor = () => {
           editor={editor}
         />
         <DrawSidebar
+          selectedTool={selectedTool}
+          onChangeSelectedTool={onChangeSelectedTool}
+          editor={editor}
+        />
+        <WorkspaceBackgroundColorSidebar
           selectedTool={selectedTool}
           onChangeSelectedTool={onChangeSelectedTool}
           editor={editor}

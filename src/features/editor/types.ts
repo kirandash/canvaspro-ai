@@ -11,6 +11,7 @@ export type SelectedTool =
   | "select"
   | "draw"
   | "fill"
+  | "workspace-background-color"
   | "uploads"
   | "stroke-width"
   | "stroke-color"
@@ -34,12 +35,16 @@ export type CreateEditorProps = {
   setStrokeDashArray: (dashArray: number[]) => void;
   setBrushColor: (color: string) => void;
   setBrushWidth: (width: number) => void;
+  autoZoom: () => void;
   selectedObjects: fabric.Object[];
   copy: () => void;
   paste: () => void;
+  workspaceBackgroundColor: string;
+  setWorkspaceBackgroundColor: (color: string) => void;
 };
 
 export type Editor = {
+  getWorkspace: () => fabric.Object | undefined;
   copy: () => void;
   paste: () => void;
   lockObjects: () => void;
@@ -88,6 +93,7 @@ export type Editor = {
   getActiveObjectFontSize: () => number;
   getActiveFontAlign: () => ITextOptions["textAlign"];
   // getActiveObjectImageFilters: () => IBaseFilter[];
+  resizeCanvas: (width: number, height: number) => void;
   strokeColor: string;
   strokeWidth: number;
   selectedObjects: fabric.Object[];
@@ -95,4 +101,6 @@ export type Editor = {
   toggleUnderline: () => void;
   toggleLineThrough: () => void;
   toggleCase: () => void;
+  workspaceBackgroundColor: string;
+  addWorkspaceBackgroundColor: (color: string) => void;
 };

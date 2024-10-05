@@ -1,12 +1,12 @@
-import { useCallback, useEffect } from "react";
 import { fabric } from "fabric";
+import { useCallback, useEffect } from "react";
 
 type UseAutoResizeProps = {
   canvasWrapper: HTMLDivElement | null;
   canvas: fabric.Canvas | null;
 };
 
-const useAutoResize = ({ canvasWrapper, canvas }: UseAutoResizeProps): void => {
+const useAutoResize = ({ canvasWrapper, canvas }: UseAutoResizeProps) => {
   // autozoom function takes care of resizing the canvas and workspace
   const autoZoom = useCallback(() => {
     // Ensure canvasWrapper and canvas are available before proceeding
@@ -101,6 +101,8 @@ const useAutoResize = ({ canvasWrapper, canvas }: UseAutoResizeProps): void => {
       resizeObserver.observe(canvasWrapper);
     }
   }, [canvasWrapper, canvas, autoZoom]);
+
+  return { autoZoom };
 };
 
 export { useAutoResize };

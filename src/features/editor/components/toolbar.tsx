@@ -7,6 +7,7 @@ import {
   FONT_SIZE,
   FONT_WEIGHT,
   STROKE_COLOR,
+  WORKSPACE_BACKGROUND_COLOR,
 } from "@/features/editor/constants";
 import { Editor, SelectedTool } from "@/features/editor/types";
 import { isTextType } from "@/features/editor/utils";
@@ -64,10 +65,13 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
   const fillColor = editor?.getActiveObjectFillColor() ?? FILL_COLOR;
   const strokeColor = editor?.getActiveObjectStrokeColor() ?? STROKE_COLOR;
   const fontFamily = editor?.getActiveObjectFontFamily() ?? FONT_FAMILY;
+  const workspaceBackgroundColor =
+    editor?.workspaceBackgroundColor ?? WORKSPACE_BACKGROUND_COLOR;
 
   const selectedObject = editor?.selectedObjects[0];
   const isText = isTextType(selectedObject?.type);
   const isImage = selectedObject?.type === "image";
+  const isWorkspace = selectedObject?.name === "defaultCanvasWorkspace";
 
   // @ts-expect-error - currentSrc is not in the type definition
   const currentImageSrc = selectedObject?._originalElement?.currentSrc;
@@ -156,235 +160,267 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
   return (
     <div className="flex justify-center w-full my-2">
       <div className="shrink-0 h-10 bg-neutral-800 shadow py-1 gap-1 z-50 overflow-x-auto flex items-center min-w-80 rounded-lg justify-center">
-        {/* Fill Color */}
-        {!isText && !isImage && (
+        {/* Canvas BG Color */}
+        {isWorkspace && (
           <Button
             variant={"ghost"}
             size={"icon"}
-            onClick={() => onChangeSelectedTool("fill")}
-            className={cn(selectedTool === "fill" ? "bg-neutral-600" : "")}
+            onClick={() => onChangeSelectedTool("workspace-background-color")}
+            className={cn(
+              selectedTool === "workspace-background-color"
+                ? "bg-neutral-600"
+                : ""
+            )}
           >
             <div
               className="rounded size-6"
               style={{
                 backgroundColor:
-                  typeof fillColor === "string" ? fillColor : FILL_COLOR,
+                  typeof workspaceBackgroundColor === "string"
+                    ? workspaceBackgroundColor
+                    : WORKSPACE_BACKGROUND_COLOR,
               }}
             />
           </Button>
         )}
-        {/* Font Family */}
-        {isText && (
-          <Button
-            variant={"ghost"}
-            onClick={() => onChangeSelectedTool("font")}
-            className={cn(
-              "text-left",
-              selectedTool === "font" ? "bg-neutral-600" : ""
+        {!isWorkspace && (
+          <>
+            {/* Fill Color */}
+            {!isText && !isImage && (
+              <Button
+                variant={"ghost"}
+                size={"icon"}
+                onClick={() => onChangeSelectedTool("fill")}
+                className={cn(selectedTool === "fill" ? "bg-neutral-600" : "")}
+              >
+                <div
+                  className="rounded size-6"
+                  style={{
+                    backgroundColor:
+                      typeof fillColor === "string" ? fillColor : FILL_COLOR,
+                  }}
+                />
+              </Button>
             )}
-          >
-            <div className="max-w-24 text-ellipsis overflow-hidden text-nowrap">
-              {fontFamily}
-            </div>
-          </Button>
-        )}
-        {/* Font Size */}
-        {isText && <StepperInput value={fontSize} setValue={changeFontSize} />}
-        {/* Text Color */}
-        {isText && (
-          <Button
-            variant={"ghost"}
-            size={"icon"}
-            onClick={() => onChangeSelectedTool("fill")}
-            className={cn(selectedTool === "fill" ? "bg-neutral-600" : "")}
-          >
-            <MdFormatColorText
-              className="size-6"
-              style={{
-                fill: typeof fillColor === "string" ? fillColor : FILL_COLOR,
+            {/* Font Family */}
+            {isText && (
+              <Button
+                variant={"ghost"}
+                onClick={() => onChangeSelectedTool("font")}
+                className={cn(
+                  "text-left",
+                  selectedTool === "font" ? "bg-neutral-600" : ""
+                )}
+              >
+                <div className="max-w-24 text-ellipsis overflow-hidden text-nowrap">
+                  {fontFamily}
+                </div>
+              </Button>
+            )}
+            {/* Font Size */}
+            {isText && (
+              <StepperInput value={fontSize} setValue={changeFontSize} />
+            )}
+            {/* Text Color */}
+            {isText && (
+              <Button
+                variant={"ghost"}
+                size={"icon"}
+                onClick={() => onChangeSelectedTool("fill")}
+                className={cn(selectedTool === "fill" ? "bg-neutral-600" : "")}
+              >
+                <MdFormatColorText
+                  className="size-6"
+                  style={{
+                    fill:
+                      typeof fillColor === "string" ? fillColor : FILL_COLOR,
+                  }}
+                />
+              </Button>
+            )}
+            {/* Font weight */}
+            {isText && (
+              <Button
+                variant={"ghost"}
+                size={"icon"}
+                onClick={changeFontWeight}
+                className={cn(fontWeight > 500 ? "bg-neutral-600" : "")}
+              >
+                <Bold className="size-6" />
+              </Button>
+            )}
+            {/* Font Style */}
+            {isText && (
+              <Button
+                variant={"ghost"}
+                size={"icon"}
+                onClick={changeFontStyle}
+                className={cn(fontStyle === "italic" ? "bg-neutral-600" : "")}
+              >
+                <Italic className="size-6" />
+              </Button>
+            )}
+            {/* Underline */}
+            {isText && (
+              <Button
+                variant={"ghost"}
+                size={"icon"}
+                onClick={changeUnderline}
+                className={cn(underline === true ? "bg-neutral-600" : "")}
+              >
+                <Underline className="size-6" />
+              </Button>
+            )}
+            {/* Line through */}
+            {isText && (
+              <Button
+                variant={"ghost"}
+                size={"icon"}
+                onClick={changeLineThrough}
+                className={cn(lineThrough === true ? "bg-neutral-600" : "")}
+              >
+                <Strikethrough className="size-6" />
+              </Button>
+            )}
+            {/* Uppercase */}
+            {isText && (
+              <Button
+                variant={"ghost"}
+                size={"icon"}
+                onClick={changeTextCase}
+                className={cn(textCase === "uppercase" ? "bg-neutral-600" : "")}
+              >
+                <RxLetterCaseUppercase className="size-6" />
+              </Button>
+            )}
+            {/* Font Align */}
+            {isText && (
+              <Button variant={"ghost"} size={"icon"} onClick={changeFontAlign}>
+                {(() => {
+                  if (fontAlign === "left") return <AlignLeft />;
+                  if (fontAlign === "center") return <AlignCenter />;
+                  if (fontAlign === "right") return <AlignRight />;
+                  return <AlignJustify />;
+                })()}
+              </Button>
+            )}
+            {!isText && (
+              <Button
+                variant={"ghost"}
+                size={"icon"}
+                onClick={() => onChangeSelectedTool("stroke-color")}
+                className={cn(
+                  selectedTool === "stroke-color" ? "bg-neutral-600" : ""
+                )}
+              >
+                <div
+                  className="rounded size-6 border-2"
+                  style={{
+                    borderColor:
+                      typeof strokeColor === "string"
+                        ? strokeColor
+                        : STROKE_COLOR,
+                  }}
+                />
+              </Button>
+            )}
+            {/* Edit Image */}
+            {isImage && (
+              <Button
+                variant={"ghost"}
+                onClick={() => onRemoveBackground()}
+                className={cn("flex gap-1")}
+                disabled={mutation.isPending}
+              >
+                BG Remover
+                <Crown className="size-3 fill-zinc-300" />
+              </Button>
+            )}
+            {/* BG Remover */}
+            {isImage && (
+              <Button
+                size={"icon"}
+                variant={"ghost"}
+                onClick={() => onChangeSelectedTool("edit-image")}
+                className={cn(
+                  selectedTool === "edit-image" ? "bg-neutral-600" : ""
+                )}
+              >
+                <RiImageEditLine className="size-6" />
+              </Button>
+            )}
+            {/* Stroke Width */}
+            {!isText && (
+              <Button
+                variant={"ghost"}
+                size={"icon"}
+                onClick={() => onChangeSelectedTool("stroke-width")}
+                className={cn(
+                  selectedTool === "stroke-width" ? "bg-neutral-600" : ""
+                )}
+              >
+                <RxBorderWidth className="size-6" />
+              </Button>
+            )}
+            <Button
+              variant={"ghost"}
+              size={"icon"}
+              onClick={() => editor?.bringForward()}
+            >
+              <ArrowUpFromLine className="size-6" />
+            </Button>
+            <Button
+              variant={"ghost"}
+              size={"icon"}
+              onClick={() => editor?.sendBackwards()}
+            >
+              <ArrowDownFromLine className="size-6" />
+            </Button>
+            <Button
+              variant={"ghost"}
+              size={"icon"}
+              onClick={() => onChangeSelectedTool("opacity")}
+              className={cn(selectedTool === "opacity" ? "bg-neutral-600" : "")}
+            >
+              <RxTransparencyGrid className="size-6" />
+            </Button>
+            {/* Duplicate Object */}
+            <Button
+              variant={"ghost"}
+              size={"icon"}
+              onClick={() => {
+                editor?.copy();
+                editor?.paste();
               }}
-            />
-          </Button>
+            >
+              <CopyPlus className="size-6" />
+            </Button>
+            {/* Delete Object */}
+            <Button
+              variant={"ghost"}
+              size={"icon"}
+              onClick={() => editor?.deleteObjects()}
+            >
+              <Trash2 className="size-6" />
+            </Button>
+            {/* Lock Object */}
+            <Button
+              variant={"ghost"}
+              size={"icon"}
+              onClick={() => editor?.lockObjects()}
+            >
+              <LockKeyhole className="size-6" />
+            </Button>
+            {/* Unlock Object */}
+            <Button
+              variant={"ghost"}
+              size={"icon"}
+              onClick={() => editor?.unlockObjects()}
+            >
+              <LockKeyholeOpen className="size-6" />
+            </Button>
+          </>
         )}
-        {/* Font weight */}
-        {isText && (
-          <Button
-            variant={"ghost"}
-            size={"icon"}
-            onClick={changeFontWeight}
-            className={cn(fontWeight > 500 ? "bg-neutral-600" : "")}
-          >
-            <Bold className="size-6" />
-          </Button>
-        )}
-        {/* Font Style */}
-        {isText && (
-          <Button
-            variant={"ghost"}
-            size={"icon"}
-            onClick={changeFontStyle}
-            className={cn(fontStyle === "italic" ? "bg-neutral-600" : "")}
-          >
-            <Italic className="size-6" />
-          </Button>
-        )}
-        {/* Underline */}
-        {isText && (
-          <Button
-            variant={"ghost"}
-            size={"icon"}
-            onClick={changeUnderline}
-            className={cn(underline === true ? "bg-neutral-600" : "")}
-          >
-            <Underline className="size-6" />
-          </Button>
-        )}
-        {/* Line through */}
-        {isText && (
-          <Button
-            variant={"ghost"}
-            size={"icon"}
-            onClick={changeLineThrough}
-            className={cn(lineThrough === true ? "bg-neutral-600" : "")}
-          >
-            <Strikethrough className="size-6" />
-          </Button>
-        )}
-        {/* Uppercase */}
-        {isText && (
-          <Button
-            variant={"ghost"}
-            size={"icon"}
-            onClick={changeTextCase}
-            className={cn(textCase === "uppercase" ? "bg-neutral-600" : "")}
-          >
-            <RxLetterCaseUppercase className="size-6" />
-          </Button>
-        )}
-        {/* Font Align */}
-        {isText && (
-          <Button variant={"ghost"} size={"icon"} onClick={changeFontAlign}>
-            {(() => {
-              if (fontAlign === "left") return <AlignLeft />;
-              if (fontAlign === "center") return <AlignCenter />;
-              if (fontAlign === "right") return <AlignRight />;
-              return <AlignJustify />;
-            })()}
-          </Button>
-        )}
-        {!isText && (
-          <Button
-            variant={"ghost"}
-            size={"icon"}
-            onClick={() => onChangeSelectedTool("stroke-color")}
-            className={cn(
-              selectedTool === "stroke-color" ? "bg-neutral-600" : ""
-            )}
-          >
-            <div
-              className="rounded size-6 border-2"
-              style={{
-                borderColor:
-                  typeof strokeColor === "string" ? strokeColor : STROKE_COLOR,
-              }}
-            />
-          </Button>
-        )}
-        {/* Edit Image */}
-        {isImage && (
-          <Button
-            variant={"ghost"}
-            onClick={() => onRemoveBackground()}
-            className={cn("flex gap-1")}
-            disabled={mutation.isPending}
-          >
-            BG Remover
-            <Crown className="size-3 fill-zinc-300" />
-          </Button>
-        )}
-        {/* BG Remover */}
-        {isImage && (
-          <Button
-            size={"icon"}
-            variant={"ghost"}
-            onClick={() => onChangeSelectedTool("edit-image")}
-            className={cn(
-              selectedTool === "edit-image" ? "bg-neutral-600" : ""
-            )}
-          >
-            <RiImageEditLine className="size-6" />
-          </Button>
-        )}
-        {/* Stroke Width */}
-        {!isText && (
-          <Button
-            variant={"ghost"}
-            size={"icon"}
-            onClick={() => onChangeSelectedTool("stroke-width")}
-            className={cn(
-              selectedTool === "stroke-width" ? "bg-neutral-600" : ""
-            )}
-          >
-            <RxBorderWidth className="size-6" />
-          </Button>
-        )}
-        <Button
-          variant={"ghost"}
-          size={"icon"}
-          onClick={() => editor?.bringForward()}
-        >
-          <ArrowUpFromLine className="size-6" />
-        </Button>
-        <Button
-          variant={"ghost"}
-          size={"icon"}
-          onClick={() => editor?.sendBackwards()}
-        >
-          <ArrowDownFromLine className="size-6" />
-        </Button>
-        <Button
-          variant={"ghost"}
-          size={"icon"}
-          onClick={() => onChangeSelectedTool("opacity")}
-          className={cn(selectedTool === "opacity" ? "bg-neutral-600" : "")}
-        >
-          <RxTransparencyGrid className="size-6" />
-        </Button>
-        {/* Duplicate Object */}
-        <Button
-          variant={"ghost"}
-          size={"icon"}
-          onClick={() => {
-            editor?.copy();
-            editor?.paste();
-          }}
-        >
-          <CopyPlus className="size-6" />
-        </Button>
-        {/* Delete Object */}
-        <Button
-          variant={"ghost"}
-          size={"icon"}
-          onClick={() => editor?.deleteObjects()}
-        >
-          <Trash2 className="size-6" />
-        </Button>
-        {/* Lock Object */}
-        <Button
-          variant={"ghost"}
-          size={"icon"}
-          onClick={() => editor?.lockObjects()}
-        >
-          <LockKeyhole className="size-6" />
-        </Button>
-        {/* Unlock Object */}
-        <Button
-          variant={"ghost"}
-          size={"icon"}
-          onClick={() => editor?.unlockObjects()}
-        >
-          <LockKeyholeOpen className="size-6" />
-        </Button>
       </div>
     </div>
   );
