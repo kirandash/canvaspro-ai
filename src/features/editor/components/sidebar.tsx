@@ -18,7 +18,7 @@ type Props = {
 
 const Sidebar = ({ selectedTool, onChangeSelectedTool }: Props) => {
   return (
-    <aside className="flex flex-col bg-zinc-900 w-18 items-center h-full overflow-y-auto">
+    <aside className="flex flex-col bg-zinc-900 w-18 h-full overflow-y-auto">
       <ul className="flex flex-col">
         <SidebarItem
           icon={PanelsLeftBottom}
