@@ -4,6 +4,7 @@ import AISidebar from "@/features/editor/components/ai-sidebar";
 import BorderColorSidebar from "@/features/editor/components/border-color-sidebar";
 import BorderSidebar from "@/features/editor/components/border-sidebar";
 import ColorSidebar from "@/features/editor/components/color-sidebar";
+import DrawSidebar from "@/features/editor/components/draw-sidebar";
 import EditImageSidebar from "@/features/editor/components/edit-image-sidebar";
 import ElementsSidebar from "@/features/editor/components/elements-sidebar";
 import FontSidebar from "@/features/editor/components/font-sidebar";
@@ -38,18 +39,20 @@ const Editor = () => {
   // added useCallback because onChangeSelectedTool is a dependency of useEffect
   const onChangeSelectedTool = useCallback(
     (tool: SelectedTool) => {
-      if (tool === selectedTool) {
-        return setSelectedTool("select");
-      }
       if (tool === "draw") {
         // draw mode
+        editor?.enableDrawingMode();
       }
       if (selectedTool === "draw") {
         // exit draw mode
+        editor?.disableDrawingMode();
+      }
+      if (tool === selectedTool) {
+        return setSelectedTool("select");
       }
       setSelectedTool(tool);
     },
-    [selectedTool]
+    [selectedTool, editor]
   );
 
   useEffect(() => {
@@ -126,6 +129,11 @@ const Editor = () => {
           editor={editor}
         />
         <AISidebar
+          selectedTool={selectedTool}
+          onChangeSelectedTool={onChangeSelectedTool}
+          editor={editor}
+        />
+        <DrawSidebar
           selectedTool={selectedTool}
           onChangeSelectedTool={onChangeSelectedTool}
           editor={editor}

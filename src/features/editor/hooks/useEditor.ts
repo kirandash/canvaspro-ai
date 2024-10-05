@@ -1,4 +1,6 @@
 import {
+  BRUSH_COLOR,
+  BRUSH_WIDTH,
   CIRCLE_OPTIONS,
   DIAMOND_OPTIONS,
   FILL_COLOR,
@@ -26,6 +28,8 @@ const createEditor = ({
   canvas,
   fillColor,
   fontFamily,
+  brushColor,
+  brushWidth,
   setFontFamily,
   strokeColor,
   strokeWidth,
@@ -35,6 +39,8 @@ const createEditor = ({
   selectedObjects,
   strokeDashArray,
   setStrokeDashArray,
+  setBrushColor,
+  setBrushWidth,
   copy,
   paste,
 }: CreateEditorProps): Editor => {
@@ -387,6 +393,15 @@ const createEditor = ({
       canvas.getActiveObjects().forEach((object) => {
         object.set({ strokeWidth: width });
       });
+    },
+    addBrushColor: (color: string) => {
+      setBrushColor(color);
+      canvas.freeDrawingBrush.color = color;
+      canvas.renderAll();
+    },
+    addBrushWidth: (width: number) => {
+      setBrushWidth(width);
+      canvas.freeDrawingBrush.width = width;
       canvas.renderAll();
     },
     addStrokeDashArray: (dashArray: number[]) => {
@@ -410,6 +425,18 @@ const createEditor = ({
       canvas.renderAll();
     },
     fillColor, // editor fill color
+    enableDrawingMode: () => {
+      canvas.discardActiveObject();
+      canvas.renderAll();
+      canvas.isDrawingMode = true;
+      canvas.freeDrawingBrush.width = strokeWidth;
+      canvas.freeDrawingBrush.color = fillColor;
+    },
+    disableDrawingMode: () => {
+      canvas.isDrawingMode = false;
+    },
+    brushColor,
+    brushWidth,
     getActiveObjectFillColor: () => {
       const activeObject = selectedObjects[0];
 
@@ -578,6 +605,8 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
     useState<number[]>(STROKE_DASH_ARRAY);
   const [fontFamily, setFontFamily] = useState<string>(FONT_FAMILY);
   const { copy, paste } = useClipboard({ canvas });
+  const [brushColor, setBrushColor] = useState<string>(BRUSH_COLOR);
+  const [brushWidth, setBrushWidth] = useState<number>(BRUSH_WIDTH);
 
   useCanvasEvents({
     canvas,
@@ -599,12 +628,16 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
         setFontFamily,
         strokeColor,
         strokeWidth,
+        brushColor,
+        brushWidth,
         setFillColor,
         setStrokeColor,
         setStrokeWidth,
         selectedObjects,
         strokeDashArray,
         setStrokeDashArray,
+        setBrushColor,
+        setBrushWidth,
         copy,
         paste,
       });
@@ -616,6 +649,8 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
     fontFamily,
     strokeColor,
     strokeWidth,
+    brushColor,
+    brushWidth,
     selectedObjects,
     strokeDashArray,
     copy,

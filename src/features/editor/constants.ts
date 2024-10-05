@@ -75,10 +75,12 @@ export const selectionOnlyTools = [
   "remove-bg",
 ];
 
-export const FILL_COLOR = "rgba(0,0,0,0.7)";
+export const FILL_COLOR = "rgba(0,0,0,1)";
 export const STROKE_COLOR = "rgba(0,0,0,1)";
 export const STROKE_WIDTH = 2;
 export const STROKE_DASH_ARRAY = [];
+export const BRUSH_COLOR = "rgba(0,0,0,1)";
+export const BRUSH_WIDTH = 50;
 export const OPACITY = 1;
 export const FONT_SIZE = 40;
 export const FONT_FAMILY = "Arial";

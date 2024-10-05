@@ -30,7 +30,6 @@ const EditImageSidebar = ({
     setImageFilter(filter);
   };
 
-  console.log("imageFilter", imageFilter);
   return (
     <aside
       className={cn(
