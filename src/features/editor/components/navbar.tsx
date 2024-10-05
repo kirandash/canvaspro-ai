@@ -136,10 +136,20 @@ const Navbar = ({ selectedTool, onChangeSelectedTool, editor }: Props) => {
             )}
           />
         </Button>
-        <Button variant={"ghost"} size={"icon"}>
+        <Button
+          variant={"ghost"}
+          size={"icon"}
+          onClick={() => editor?.undo()}
+          disabled={!editor?.canUndo()}
+        >
           <Undo2 />
         </Button>
-        <Button variant={"ghost"} size={"icon"}>
+        <Button
+          variant={"ghost"}
+          size={"icon"}
+          onClick={() => editor?.redo()}
+          disabled={!editor?.canRedo()}
+        >
           <Redo2 />
         </Button>
         <Button variant={"ghost"} size={"icon"}>

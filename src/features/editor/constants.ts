@@ -87,6 +87,17 @@ export const FONT_SIZE = 40;
 export const FONT_FAMILY = "Arial";
 export const FONT_WEIGHT = 400;
 
+export const CANVAS_JSON_KEYS = [
+  "name",
+  "editable",
+  "extension",
+  "extensionType",
+  "selectable",
+  "gradientAngle",
+  "hasControls",
+  "linkData",
+];
+
 export const RECTANGLE_OPTIONS = {
   width: 500,
   height: 500,

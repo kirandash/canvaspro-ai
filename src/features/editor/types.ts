@@ -41,6 +41,11 @@ export type CreateEditorProps = {
   paste: () => void;
   workspaceBackgroundColor: string;
   setWorkspaceBackgroundColor: (color: string) => void;
+  save: (skip?: boolean) => void;
+  canRedo: () => boolean;
+  canUndo: () => boolean;
+  undo: () => void;
+  redo: () => void;
 };
 
 export type Editor = {
@@ -106,4 +111,8 @@ export type Editor = {
   addWorkspaceBackgroundColor: (color: string) => void;
   zoomIn: () => void;
   zoomOut: () => void;
+  canRedo: () => boolean;
+  canUndo: () => boolean;
+  undo: () => void;
+  redo: () => void;
 };

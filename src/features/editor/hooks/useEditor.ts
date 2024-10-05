@@ -1,6 +1,7 @@
 import {
   BRUSH_COLOR,
   BRUSH_WIDTH,
+  CANVAS_JSON_KEYS,
   CIRCLE_OPTIONS,
   DIAMOND_OPTIONS,
   FILL_COLOR,
@@ -18,6 +19,7 @@ import {
 } from "@/features/editor/constants";
 import { useCanvasEvents } from "@/features/editor/hooks/useCanvasEvents";
 import { useClipboard } from "@/features/editor/hooks/useClipboard";
+import { useHistory } from "@/features/editor/hooks/useHistory";
 import { CreateEditorProps, Editor } from "@/features/editor/types";
 import { generateFilter, isTextType } from "@/features/editor/utils";
 import { fabric } from "fabric";
@@ -26,6 +28,11 @@ import { useCallback, useMemo, useState } from "react";
 import { useAutoResize } from "./useAutoResize";
 
 const createEditor = ({
+  save,
+  canRedo,
+  canUndo,
+  undo,
+  redo,
   autoZoom,
   canvas,
   fillColor,
@@ -80,8 +87,13 @@ const createEditor = ({
       if (workspace) {
         workspace.set({ fill: color });
         canvas.renderAll();
+        save();
       }
     },
+    canRedo,
+    canUndo,
+    undo,
+    redo,
     getWorkspace,
     copy: () => copy(),
     paste: () => paste(),
@@ -110,6 +122,7 @@ const createEditor = ({
       if (workspace) {
         workspace.set({ width, height });
         autoZoom();
+        save();
       }
     },
     addImageFilter: (filter: string) => {
@@ -129,6 +142,7 @@ const createEditor = ({
         }
       });
       canvas.renderAll();
+      save();
     },
     addPhoto: (url: string) => {
       fabric.Image.fromURL(
@@ -295,6 +309,7 @@ const createEditor = ({
       });
       // This is required to re-render the canvas after changing the fill color
       canvas.renderAll();
+      save();
     },
     addFontFamily: (fontFamily: string) => {
       setFontFamily(fontFamily);
@@ -304,6 +319,7 @@ const createEditor = ({
         }
       });
       canvas.renderAll();
+      save();
     },
     addFontWeight: (fontWeight: number) => {
       canvas.getActiveObjects().forEach((object) => {
@@ -312,6 +328,7 @@ const createEditor = ({
         }
       });
       canvas.renderAll();
+      save();
     },
     // 🚨 TODO: Use ITextOptions with pick instead
     addFontStyle: (fontStyle: "italic" | "normal") => {
@@ -321,6 +338,7 @@ const createEditor = ({
         }
       });
       canvas.renderAll();
+      save();
     },
     addFontAlign: (textAlign: ITextOptions["textAlign"]) => {
       canvas.getActiveObjects().forEach((object) => {
@@ -329,6 +347,7 @@ const createEditor = ({
         }
       });
       canvas.renderAll();
+      save();
     },
     addFontSize: (fontSize: number) => {
       canvas.getActiveObjects().forEach((object) => {
@@ -337,6 +356,7 @@ const createEditor = ({
         }
       });
       canvas.renderAll();
+      save();
     },
     deleteObjects: () => {
       canvas.getActiveObjects().forEach((object) => {
@@ -360,6 +380,7 @@ const createEditor = ({
       });
       canvas.discardActiveObject(); // Deselect objects after locking
       canvas.renderAll();
+      save();
     },
     unlockObjects: () => {
       canvas.getActiveObjects().forEach((object) => {
@@ -374,6 +395,7 @@ const createEditor = ({
         });
       });
       canvas.renderAll();
+      save();
     },
     toggleUnderline: () => {
       canvas.getActiveObjects().forEach((object) => {
@@ -385,6 +407,7 @@ const createEditor = ({
         }
       });
       canvas.renderAll();
+      save();
     },
     toggleLineThrough: () => {
       canvas.getActiveObjects().forEach((object) => {
@@ -646,13 +669,19 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
   const [strokeDashArray, setStrokeDashArray] =
     useState<number[]>(STROKE_DASH_ARRAY);
   const [fontFamily, setFontFamily] = useState<string>(FONT_FAMILY);
-  const { copy, paste } = useClipboard({ canvas });
   const [brushColor, setBrushColor] = useState<string>(BRUSH_COLOR);
   const [brushWidth, setBrushWidth] = useState<number>(BRUSH_WIDTH);
   const [workspaceBackgroundColor, setWorkspaceBackgroundColor] =
     useState<string>(WORKSPACE_BACKGROUND_COLOR);
 
+  const { copy, paste } = useClipboard({ canvas });
+  const { save, canRedo, canUndo, undo, redo, canvasHistory, setHistoryIndex } =
+    useHistory({
+      canvas,
+    });
+
   useCanvasEvents({
+    save,
     canvas,
     setSelectedObjects,
     selectionClearedCallback,
@@ -666,6 +695,11 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
   const editor = useMemo(() => {
     if (canvas) {
       return createEditor({
+        save,
+        canRedo,
+        canUndo,
+        undo,
+        redo,
         autoZoom,
         canvas,
         fillColor,
@@ -691,6 +725,11 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
     }
     return undefined;
   }, [
+    save,
+    canRedo,
+    canUndo,
+    undo,
+    redo,
     autoZoom,
     canvas,
     fillColor,
@@ -766,8 +805,15 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
 
       // initialCanvas.add(rectangleObject);
       // initialCanvas.centerObject(rectangleObject);
+
+      // Initialize Editor History
+      // 🚨 This is important to make sure the initial workspace state is being tracked in the history
+      const currentCanvasState = initialCanvas.toJSON(CANVAS_JSON_KEYS);
+      const currentCanvasStateString = JSON.stringify(currentCanvasState);
+      canvasHistory.current = [currentCanvasStateString];
+      setHistoryIndex(0);
     },
-    []
+    [canvasHistory, setHistoryIndex] // no need to add setHistoryIndex as it is a setState function but vscode does not recognize it as a setState function
   );
 
   return { init, editor };
