@@ -197,3 +197,13 @@
   - https://console.cloud.google.com/
   - create a project -> apis and services -> oauth consent screen -> Choose External --> Click Create -> Save
   - Credentials --> OAuth Client ID --> Web Application --> Name: CanvasPro --> Authorized redirect URIs: http://localhost:3000/api/auth/callback/google
+
+### 47. Credentials Auth with Auth.js
+
+- https://authjs.dev/getting-started/authentication/credentials
+- For google and github we have used db session strategy but for credentials we will use jwt strategy
+- db session strategy will create sessions with user id while jwt strategy sessions will not have an id. In order to add id follow this: https://authjs.dev/guides/extending-the-session
+- make sure to add password to the user schema so that it is saved in db.
+- `npm run db:generate`
+- `npm run db:migrate`
+- `npm run db:studio`

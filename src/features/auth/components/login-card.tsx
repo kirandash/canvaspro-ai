@@ -9,16 +9,39 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import ErrorAlert from "@/components/ui/error";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import {
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
+} from "@/features/editor/constants";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { FaGithub } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
 import { TfiEmail } from "react-icons/tfi";
 
 export default function LogInCard() {
-  const onProviderLogin = async (provider: "github" | "google") => {
+  const onOAuthProviderLogin = async (provider: "github" | "google") => {
     // redirectTo can be used to override the default redirect behavior of the provider. It is optional.
     signIn(provider, { redirectTo: "/" });
+  };
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const params = useSearchParams();
+  const error = params.get("error");
+
+  const onCredentialsLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await signIn("credentials", {
+      email,
+      password,
+      redirectTo: "/",
+    });
   };
 
   return (
@@ -41,7 +64,7 @@ export default function LogInCard() {
             // type="submit"
             className="flex gap-1 w-full relative"
             variant={"outline"}
-            onClick={() => onProviderLogin("github")}
+            onClick={() => onOAuthProviderLogin("github")}
           >
             <FaGithub className="top-1/2 -translate-y-1/2 left-2 absolute" />
             Log in with GitHub
@@ -55,7 +78,7 @@ export default function LogInCard() {
           > */}
           <Button
             // type="submit"
-            onClick={() => onProviderLogin("google")}
+            onClick={() => onOAuthProviderLogin("google")}
             className="flex gap-1 w-full relative"
             variant={"outline"}
           >
@@ -63,14 +86,45 @@ export default function LogInCard() {
             Log in with Google
           </Button>
           {/* </form> */}
-          <Button
-            type="submit"
-            className="flex gap-1 w-full relative"
-            variant={"outline"}
+          <Separator />
+          <form
+            onSubmit={onCredentialsLogin}
+            className="flex space-y-4 flex-col"
           >
-            <TfiEmail className="top-1/2 -translate-y-1/2 left-2 absolute" />
-            Log in with Email
-          </Button>
+            <div className="flex space-y-2 flex-col">
+              <Label>Email (personal or work)</Label>
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                className="p-2 border border-gray-300 rounded"
+              />
+            </div>
+            <div className="flex space-y-2 flex-col">
+              <Label>Password</Label>
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                className="p-2 border border-gray-300 rounded"
+                minLength={PASSWORD_MIN_LENGTH}
+                maxLength={PASSWORD_MAX_LENGTH}
+              />
+            </div>
+            <Button
+              type="submit"
+              className="flex gap-1 w-full relative"
+              variant={"outline"}
+            >
+              <TfiEmail className="top-1/2 -translate-y-1/2 left-2 absolute" />
+              Log in with Email
+            </Button>
+            {error === "CredentialsSignin" && (
+              <ErrorAlert text="Invalid email or password" />
+            )}
+          </form>
         </div>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2">

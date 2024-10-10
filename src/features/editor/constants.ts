@@ -87,6 +87,9 @@ export const FONT_SIZE = 40;
 export const FONT_FAMILY = "Arial";
 export const FONT_WEIGHT = 400;
 
+export const PASSWORD_MIN_LENGTH = 6;
+export const PASSWORD_MAX_LENGTH = 24;
+
 export const CANVAS_JSON_KEYS = [
   "name",
   "editable",
