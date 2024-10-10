@@ -1,12 +1,11 @@
-import { auth } from "@/auth";
+import { protectRoute } from "@/features/auth/utils";
 
 export default async function Home() {
-  const session = await auth();
+  await protectRoute();
   return (
     <div>
       <h1>Home</h1>
       <p>Welcome to the Home page</p>
-      <pre>{JSON.stringify(session, null, 2)}</pre>
     </div>
   );
 }

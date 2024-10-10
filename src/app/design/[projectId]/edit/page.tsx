@@ -1,7 +1,8 @@
-import React from "react";
+import { protectRoute } from "@/features/auth/utils";
 import Editor from "../../../../features/editor/components/editor";
 
-const DesignEditPage = () => {
+const DesignEditPage = async () => {
+  await protectRoute();
   return <Editor />;
 };
 
