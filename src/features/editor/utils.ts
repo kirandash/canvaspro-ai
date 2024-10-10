@@ -142,9 +142,11 @@ export function rgbaObjectToString(color: RGBColor | "transparent") {
 }
 
 // This function is used to transform the text object to textbox object
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const transformText = (objects: any) => {
   if (!objects) return;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   objects.forEach((object: any) => {
     // This is recursively calling the function to transform the text
     if (object.objects) {
