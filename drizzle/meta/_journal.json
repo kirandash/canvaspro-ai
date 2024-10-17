@@ -15,6 +15,13 @@
       "when": 1728584067427,
       "tag": "0001_amused_molecule_man",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1729187101616,
+      "tag": "0002_secret_skrulls",
+      "breakpoints": true
     }
   ]
 }
