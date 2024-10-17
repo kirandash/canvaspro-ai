@@ -1,6 +1,7 @@
 import Providers from "@/components/providers/providers";
 import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
+import { SessionProvider } from "next-auth/react";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -21,19 +22,21 @@ export const metadata: Metadata = {
     "Feature rich graphic design AI SaaS platform - Free Live Course on YouTube",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Toaster />
-        <Providers>{children}</Providers>
-      </body>
-    </html>
+    <SessionProvider>
+      <html lang="en" className="dark">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <Toaster />
+          <Providers>{children}</Providers>
+        </body>
+      </html>
+    </SessionProvider>
   );
 }

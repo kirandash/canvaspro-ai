@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import ProfileButton from "@/features/auth/components/profile-button";
 import Logo from "@/features/editor/components/logo";
 import { Editor, SelectedTool } from "@/features/editor/types";
 import { cn } from "@/lib/utils";
@@ -186,6 +187,9 @@ const Navbar = ({ selectedTool, onChangeSelectedTool, editor }: Props) => {
         <Button variant={"ghost"} size={"icon"}>
           <HardDriveUpload />
         </Button>
+        <div className="ml-auto">
+          <ProfileButton />
+        </div>
       </div>
     </nav>
   );
