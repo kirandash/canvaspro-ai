@@ -24,7 +24,7 @@ const ProfileButton = () => {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <Avatar className="border border-zinc-300 cursor-pointer">
+        <Avatar className="border border-zinc-500 cursor-pointer">
           <AvatarImage
             src={session.data.user?.image ?? "https://github.com/shadcn.png"}
           />

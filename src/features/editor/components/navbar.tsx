@@ -11,14 +11,17 @@ import { Input } from "@/components/ui/input";
 import ProfileButton from "@/features/auth/components/profile-button";
 import Logo from "@/features/editor/components/logo";
 import { Editor, SelectedTool } from "@/features/editor/types";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 import {
   CloudDownload,
   CloudUpload,
+  File,
   FileImage,
   HardDriveUpload,
   MousePointer2,
   Redo2,
+  Scaling,
   Undo2,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
@@ -32,6 +35,7 @@ type Props = {
 
 const Navbar = ({ selectedTool, onChangeSelectedTool, editor }: Props) => {
   const workspace = editor?.getWorkspace();
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const { openFilePicker } = useFilePicker({
     accept: ".json",
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -77,7 +81,13 @@ const Navbar = ({ selectedTool, onChangeSelectedTool, editor }: Props) => {
       <div className="w-full flex items-center gap-2 h-full">
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
-            <Button>File</Button>
+            <Button
+              variant={isDesktop ? "default" : "ghost"}
+              size={isDesktop ? "default" : "icon"}
+            >
+              <span className="lg:flex hidden">File</span>
+              <File className="flex lg:hidden" />
+            </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="start"
@@ -126,7 +136,13 @@ const Navbar = ({ selectedTool, onChangeSelectedTool, editor }: Props) => {
         </DropdownMenu>
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
-            <Button>Resize</Button>
+            <Button
+              variant={isDesktop ? "default" : "ghost"}
+              size={isDesktop ? "default" : "icon"}
+            >
+              <span className="lg:flex hidden">Resize</span>
+              <Scaling className="flex lg:hidden" />
+            </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="start"

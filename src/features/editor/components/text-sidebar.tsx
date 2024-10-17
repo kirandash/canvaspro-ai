@@ -5,7 +5,6 @@ import ElementsSidebarHeader from "@/features/editor/components/elements-sidebar
 import ToolSidebarClose from "@/features/editor/components/tool-sidebar-close";
 import { Editor, SelectedTool } from "@/features/editor/types";
 import { cn } from "@/lib/utils";
-import React from "react";
 import { TfiText } from "react-icons/tfi";
 
 type Props = {
@@ -38,7 +37,8 @@ const TextSidebar = ({ selectedTool, onChangeSelectedTool, editor }: Props) => {
           </Button>
           <Label>Default Text Styles</Label>
           <Button
-            className="bg-violet-600 hover:bg-violet-700 text-white flex gap-2 text-4xl h-auto"
+            variant={"secondary"}
+            className="flex gap-2 text-4xl h-auto"
             onClick={() => {
               editor?.addText("Add a heading", {
                 fontSize: 108,
@@ -49,7 +49,8 @@ const TextSidebar = ({ selectedTool, onChangeSelectedTool, editor }: Props) => {
             Add a heading
           </Button>
           <Button
-            className="bg-violet-600 hover:bg-violet-700 text-white flex gap-2 text-xl h-auto"
+            variant={"secondary"}
+            className="flex gap-2 text-xl h-auto"
             onClick={() => {
               editor?.addText("Add a subheading", {
                 fontSize: 60,
@@ -60,7 +61,8 @@ const TextSidebar = ({ selectedTool, onChangeSelectedTool, editor }: Props) => {
             Add a subheading
           </Button>
           <Button
-            className="bg-violet-600 hover:bg-violet-700 text-white flex gap-2 text-xl h-auto"
+            variant={"secondary"}
+            className="flex gap-2 text-xl h-auto"
             onClick={() => {
               editor?.addText("Add a little bit of body text", {
                 fontSize: 48,
