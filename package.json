@@ -12,8 +12,10 @@
     "db:studio": "npx drizzle-kit studio"
   },
   "dependencies": {
+    "@auth/core": "^0.37.0",
     "@auth/drizzle-adapter": "^1.7.0",
     "@bytescale/upload-widget-react": "^4.19.0",
+    "@hono/auth-js": "^1.0.11",
     "@hono/zod-validator": "^0.3.0",
     "@neondatabase/serverless": "^0.10.1",
     "@radix-ui/react-dropdown-menu": "^2.1.1",

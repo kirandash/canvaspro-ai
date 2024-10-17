@@ -1,5 +1,8 @@
 ## CanvasPro AI - Notes
 
+- Similar editor for inspiration:
+  - https://github.com/ikuaitu/vue-fabric-editor built on vue
+
 ## Day 1
 
 ### 1. Introduction and Project Setup
@@ -207,3 +210,14 @@
 - `npm run db:generate`
 - `npm run db:migrate`
 - `npm run db:studio`
+
+- Note: Better to avoid credentials provider and stick to OAuth providers, magic link etc. And if that's the case, then we can use the db session strategy for all providers and get rid of jwt strategy
+
+## Day 9
+
+### 48. Adding auth for hono API
+
+- create a test.ts route to make it protected route
+- https://hono.dev/docs/middleware/third-party
+- https://github.com/honojs/middleware/tree/main/packages/auth-js
+- `npm i @hono/auth-js @auth/core`

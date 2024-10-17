@@ -1,4 +1,5 @@
 import { replicate } from "@/lib/replicate";
+import { verifyAuth } from "@hono/auth-js";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { z } from "zod";
@@ -12,6 +13,7 @@ const app = new Hono()
         image: z.string(),
       })
     ),
+    verifyAuth(),
     async (c) => {
       const { image } = c.req.valid("json");
 
@@ -37,6 +39,7 @@ const app = new Hono()
         prompt: z.string(),
       })
     ),
+    verifyAuth(),
     async (c) => {
       const { prompt } = c.req.valid("json");
 
