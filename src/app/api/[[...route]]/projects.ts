@@ -2,18 +2,41 @@ import { db } from "@/db/drizzle";
 import { insertProjectSchema, projects } from "@/db/schema";
 import { verifyAuth } from "@hono/auth-js";
 import { zValidator } from "@hono/zod-validator";
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { Hono } from "hono";
 import { z } from "zod";
 
 // Chain all routes from the hono instance for the RPC architecture to work
 const app = new Hono()
-  .get("/", verifyAuth(), (c) => {
-    // if (true) {
-    //   return c.json({ error: "something went wrong" }, 400);
-    // }
-    return c.json("list projects");
-  })
+  .get(
+    "/",
+    verifyAuth(),
+    zValidator(
+      "query",
+      z.object({ page: z.coerce.number(), limit: z.coerce.number() })
+    ),
+    async (c) => {
+      const auth = c.get("authUser");
+      const { page = 1, limit = 10 } = c.req.valid("query");
+
+      if (!auth.token?.id || typeof auth.token.id !== "string") {
+        return c.json({ error: "Unauthorized" }, 401);
+      }
+
+      const data = await db
+        .select()
+        .from(projects)
+        .where(eq(projects.userId, auth.token.id))
+        .limit(limit)
+        .offset((page - 1) * limit)
+        .orderBy(desc(projects.updatedAt));
+
+      return c.json({
+        data,
+        nextPage: data.length === limit ? page + 1 : null,
+      });
+    }
+  )
   .patch(
     "/:id",
     verifyAuth(),
@@ -124,6 +147,74 @@ const app = new Hono()
 
       return c.json({ data: data[0] });
     }
-  );
+  )
+  .post(
+    "/:id/duplicate",
+    verifyAuth(),
+    // param validator
+    zValidator("param", z.object({ id: z.string() })),
+    async (c) => {
+      const auth = c.get("authUser");
+      const { id } = c.req.valid("param");
 
+      if (!auth.token?.id || typeof auth.token.id !== "string") {
+        return c.json({ error: "Unauthorized" }, 401);
+      }
+
+      // Fetch project that needs to be duplicated
+      const data = await db
+        .select()
+        .from(projects)
+        .where(and(eq(projects.id, id), eq(projects.userId, auth.token.id)));
+
+      if (data?.length === 0) {
+        return c.json({ error: "Not found" }, 404);
+      }
+
+      const project = data[0];
+
+      // Insert the project with the same data but different id
+      const duplicatedData = await db
+        .insert(projects)
+        .values({
+          ...project,
+          name: `Copy of ${project.name}`,
+          id: undefined,
+          userId: auth.token.id,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        })
+        .returning();
+
+      if (duplicatedData.length === 0) {
+        return c.json({ error: "Failed to duplicate project" }, 500);
+      }
+
+      return c.json({ data: duplicatedData[0] });
+    }
+  )
+  .delete(
+    "/:id",
+    verifyAuth(),
+    zValidator("param", z.object({ id: z.string() })),
+    async (c) => {
+      const auth = c.get("authUser");
+      const { id } = c.req.valid("param");
+
+      if (!auth.token?.id || typeof auth.token.id !== "string") {
+        return c.json({ error: "Unauthorized" }, 401);
+      }
+
+      const data = await db
+        .delete(projects)
+        .where(and(eq(projects.id, id), eq(projects.userId, auth.token.id)))
+        .returning();
+
+      if (data.length === 0) {
+        return c.json({ error: "Not found" }, 404);
+      }
+
+      return c.json({ data: { id, name: data[0].name } });
+    }
+  );
 export default app;

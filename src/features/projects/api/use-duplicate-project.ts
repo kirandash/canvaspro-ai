@@ -4,35 +4,33 @@ import { InferRequestType, InferResponseType } from "hono";
 import { toast } from "sonner";
 
 type RequestType = InferRequestType<
-  (typeof client.api.projects)[":id"]["$patch"]
->["json"];
+  (typeof client.api.projects)[":id"]["duplicate"]["$post"]
+>["param"];
 type ResponseType = InferResponseType<
-  (typeof client.api.projects)[":id"]["$patch"],
+  (typeof client.api.projects)[":id"]["duplicate"]["$post"],
   200
 >;
 
-export const usePatchProject = (id: string) => {
+export const useDuplicateProject = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation<ResponseType, Error, RequestType>({
-    mutationKey: ["project", { id }],
-    mutationFn: async (data) => {
-      const res = await client.api.projects[":id"].$patch({
-        json: data,
-        param: { id },
+    // Tip: We are using param to get access to id instead of passing it from the `useDuplicateProject` function params
+    mutationFn: async (param) => {
+      const res = await client.api.projects[":id"]["duplicate"].$post({
+        param,
       });
 
       if (!res.ok) {
-        throw new Error("Failed to update project");
+        throw new Error("Failed to copy project");
       }
 
       return await res.json();
     },
     onError: () => {
-      toast.error("Failed to update project");
+      toast.error("Failed to copy project");
     },
     onSuccess: () => {
       // toast.success("Project updated successfully");
-      queryClient.invalidateQueries({ queryKey: ["project", { id }] });
       queryClient.invalidateQueries({ queryKey: ["projects"] });
     },
   });
