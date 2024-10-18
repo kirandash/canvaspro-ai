@@ -12,6 +12,7 @@ import { useCreateProject } from "@/features/projects/api/use-create-project";
 import { useDeleteProject } from "@/features/projects/api/use-delete-project";
 import { useDuplicateProject } from "@/features/projects/api/use-duplicate-project";
 import { useFetchTemplates } from "@/features/projects/api/use-fetch-templates";
+import { usePaywall } from "@/features/subscription/hooks/use-paywall";
 import { useConfirmDialog } from "@/hooks/useConfirmDialog";
 import {
   BadgeHelp,
@@ -39,8 +40,13 @@ const RecentTemplates = () => {
   const duplicateMutation = useDuplicateProject();
   const deleteMutation = useDeleteProject();
   const router = useRouter();
+  const paywall = usePaywall();
 
-  const handleCopy = (id: string) => {
+  const handleCopy = (id: string, isPremium: boolean | null) => {
+    if (isPremium && paywall.shouldShowPaywall) {
+      paywall.triggerPaywall();
+      return;
+    }
     duplicateMutation.mutate(
       {
         id,
@@ -187,7 +193,9 @@ const RecentTemplates = () => {
                       >
                         <DropdownMenuItem
                           className="cursor-pointer flex gap-2"
-                          onClick={() => handleCopy(project.id)}
+                          onClick={() =>
+                            handleCopy(project.id, project.isPremium)
+                          }
                           disabled={duplicateMutation.isPending}
                         >
                           <SquarePen />

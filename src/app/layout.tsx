@@ -1,3 +1,4 @@
+import { Dialogs } from "@/components/dialogs";
 import Providers from "@/components/providers/providers";
 import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
@@ -33,6 +34,7 @@ export default async function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
+          <Dialogs />
           <Toaster />
           <Providers>{children}</Providers>
         </body>

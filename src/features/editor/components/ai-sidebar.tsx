@@ -5,7 +5,9 @@ import { useGenerateImage } from "@/features/ai/api/use-generate-image";
 import ElementsSidebarHeader from "@/features/editor/components/elements-sidebar-header";
 import ToolSidebarClose from "@/features/editor/components/tool-sidebar-close";
 import { Editor, SelectedTool } from "@/features/editor/types";
+import { usePaywall } from "@/features/subscription/hooks/use-paywall";
 import { cn } from "@/lib/utils";
+import { Crown } from "lucide-react";
 import { useState } from "react";
 
 type Props = {
@@ -15,11 +17,16 @@ type Props = {
 };
 
 const AISidebar = ({ selectedTool, onChangeSelectedTool, editor }: Props) => {
+  const paywall = usePaywall();
   const mutation = useGenerateImage();
   const [prompt, setPrompt] = useState("");
 
   const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (paywall.shouldShowPaywall) {
+      paywall.triggerPaywall();
+      return;
+    }
 
     mutation.mutateAsync({ prompt }).then(({ data }) => {
       editor?.addPhoto(data);
@@ -43,8 +50,13 @@ const AISidebar = ({ selectedTool, onChangeSelectedTool, editor }: Props) => {
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
           />
-          <Button type="submit" disabled={mutation.isPending}>
+          <Button
+            type="submit"
+            disabled={mutation.isPending}
+            className="flex gap-1"
+          >
             Generate image
+            <Crown className="size-3 fill-zinc-300" />
           </Button>
         </form>
         <ScrollBar orientation="horizontal" />

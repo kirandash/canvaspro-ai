@@ -11,6 +11,7 @@ import {
 } from "@/features/editor/constants";
 import { Editor, SelectedTool } from "@/features/editor/types";
 import { isTextType } from "@/features/editor/utils";
+import { usePaywall } from "@/features/subscription/hooks/use-paywall";
 import { cn } from "@/lib/utils";
 import {
   AlignCenter,
@@ -76,8 +77,13 @@ const Toolbar = ({ editor, selectedTool, onChangeSelectedTool }: Props) => {
   // @ts-expect-error - currentSrc is not in the type definition
   const currentImageSrc = selectedObject?._originalElement?.currentSrc;
   const mutation = useRemoveBackground();
+  const paywall = usePaywall();
 
   const onRemoveBackground = async () => {
+    if (paywall.shouldShowPaywall) {
+      paywall.triggerPaywall();
+      return;
+    }
     mutation.mutateAsync({ image: currentImageSrc }).then(({ data }) => {
       // 🚨 TODO: Instead of adding new photo replace the existing photo
       editor?.addPhoto(data);
