@@ -8,9 +8,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useCheckout } from "@/features/subscription/api/use-checkout";
 import { useSubscriptionDialog } from "@/features/subscription/store/use-subscription-dialog";
 
 export const SubscriptionDialog = () => {
+  const mutation = useCheckout();
   const { isOpen, onClose } = useSubscriptionDialog();
 
   const handleOpenChange = (open: boolean) => {
@@ -34,7 +36,11 @@ export const SubscriptionDialog = () => {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button variant={"secondary"} onClick={() => {}}>
+          <Button
+            variant={"secondary"}
+            onClick={() => mutation.mutate()}
+            disabled={mutation.isPending}
+          >
             Subscribe
           </Button>
         </DialogFooter>

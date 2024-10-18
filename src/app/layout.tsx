@@ -34,9 +34,11 @@ export default async function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <Dialogs />
           <Toaster />
-          <Providers>{children}</Providers>
+          <Providers>
+            <Dialogs />
+            {children}
+          </Providers>
         </body>
       </html>
     </SessionProvider>

@@ -122,3 +122,25 @@ export const projectsRelations = relations(projects, ({ one }) => ({
 }));
 
 export const insertProjectSchema = createInsertSchema(projects);
+
+export const subscriptions = pgTable("subscription", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  stripeSubscriptionId: text("stripeSubscriptionId").notNull(),
+  stripeCustomerId: text("stripeCustomerId").notNull(),
+  stripePriceId: text("stripePriceId").notNull(),
+  status: text("status").notNull(),
+  currentPeriodStart: timestamp("currentPeriodStart", { mode: "date" }),
+  currentPeriodEnd: timestamp("currentPeriodEnd", { mode: "date" }),
+  cancelAt: timestamp("cancelAt", { mode: "date" }),
+  canceledAt: timestamp("canceledAt", { mode: "date" }),
+  endedAt: timestamp("endedAt", { mode: "date" }),
+  trialStart: timestamp("trialStart", { mode: "date" }),
+  trialEnd: timestamp("trialEnd", { mode: "date" }),
+  createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
+  updatedAt: timestamp("updatedAt", { mode: "date" }).notNull(),
+});

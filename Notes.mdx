@@ -261,3 +261,14 @@
 ### 56. SAAS Implementation - UI with Zustand
 
 - Important: zustand is a client side state management library and if the component controlled by zustand are rendered on server side then it will cause some hydration issues. So make sure to use zustand only on client side. Also note that "use client" will not make sure that the component is not rendered on server side
+
+### 57. SAAS Implementation - BE with Stripe
+
+- Stripe - create account --> create business ---> Get api key ---> Create product ---> ex: monthly subscription with recurring billing --> after creating product get into pricing section and find pricing id.
+- https://dashboard.stripe.com/test/workbench/webhooks
+- https://docs.stripe.com/stripe-cli
+- https://docs.stripe.com/webhooks#test-webhook
+- `stripe listen --forward-to localhost:3000/api/subscriptions/webhook` - pls do not close this for the testing purpose
+- `stripe trigger payment_intent.succeeded`
+- test card: 4242 4242 4242 4242
+- Make customer portal for test active: https://dashboard.stripe.com/test/settings/billing/portal

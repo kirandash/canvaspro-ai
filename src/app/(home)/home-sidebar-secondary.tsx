@@ -2,12 +2,15 @@
 import { Button } from "@/components/ui/button";
 import Logo from "@/features/editor/components/logo";
 import { useCreateProject } from "@/features/projects/api/use-create-project";
+import { useFetchSubscription } from "@/features/subscription/api/use-fetch-subscription";
 import { Crown, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const HomeSidebarRoutes = () => {
   const router = useRouter();
   const mutation = useCreateProject();
+  const { data: subscription, isLoading: isLoadingSubscription } =
+    useFetchSubscription();
 
   const handleClick = () => {
     mutation.mutate(
@@ -41,10 +44,12 @@ const HomeSidebarRoutes = () => {
           <Plus className="size-3" />
           Create a design
         </Button>
-        <Button className="flex gap-1 w-full">
-          <Crown className="size-3 fill-orange-300 stroke-orange-300" />
-          Upgrade to Premium
-        </Button>
+        {!isLoadingSubscription && !subscription?.active && (
+          <Button className="flex gap-1 w-full">
+            <Crown className="size-3 fill-orange-300 stroke-orange-300" />
+            Upgrade to Premium
+          </Button>
+        )}
       </div>
     </aside>
   );

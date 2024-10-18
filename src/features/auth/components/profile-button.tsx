@@ -7,11 +7,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useBillingPortal } from "@/features/subscription/api/use-billing-portal";
+import { usePaywall } from "@/features/subscription/hooks/use-paywall";
 import { LoaderPinwheel } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 
 const ProfileButton = () => {
   const session = useSession();
+  const billingPortalMutation = useBillingPortal();
+  const { shouldShowPaywall, triggerPaywall, isLoading } = usePaywall();
 
   if (session.status === "loading") {
     return <LoaderPinwheel className="animate-spin h-[38px] w-[38px]" />;
@@ -20,6 +24,14 @@ const ProfileButton = () => {
   if (session.status === "unauthenticated" || !session.data) {
     return null;
   }
+
+  const handleClick = () => {
+    if (shouldShowPaywall) {
+      triggerPaywall();
+      return;
+    }
+    billingPortalMutation.mutate();
+  };
 
   return (
     <DropdownMenu modal={false}>
@@ -37,7 +49,11 @@ const ProfileButton = () => {
         align="start"
         className="min-w-32 sm:min-w-80 max-w-32 sm:max-w-80"
       >
-        <DropdownMenuItem className="cursor-pointer">
+        <DropdownMenuItem
+          className="cursor-pointer"
+          disabled={isLoading}
+          onClick={() => handleClick()}
+        >
           Purchase history
         </DropdownMenuItem>
         <DropdownMenuItem className="cursor-pointer" onClick={() => signOut()}>
