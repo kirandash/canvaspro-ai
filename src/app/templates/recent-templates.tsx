@@ -9,11 +9,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { useCreateProject } from "@/features/projects/api/use-create-project";
-import { useDeleteProject } from "@/features/projects/api/use-delete-project";
 import { useDuplicateProject } from "@/features/projects/api/use-duplicate-project";
 import { useFetchTemplates } from "@/features/projects/api/use-fetch-templates";
 import { usePaywall } from "@/features/subscription/hooks/use-paywall";
-import { useConfirmDialog } from "@/hooks/useConfirmDialog";
 import {
   BadgeHelp,
   CircleAlert,
@@ -30,14 +28,9 @@ import { useRouter } from "next/navigation";
 const RecentTemplates = () => {
   const { data, status, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useFetchTemplates();
-  const [ConfirmDialog, confirm] = useConfirmDialog(
-    "Warning!",
-    "Are you sure you want to delete this project?"
-  );
 
   const mutation = useCreateProject();
   const duplicateMutation = useDuplicateProject();
-  const deleteMutation = useDeleteProject();
   const router = useRouter();
   const paywall = usePaywall();
 
@@ -127,7 +120,6 @@ const RecentTemplates = () => {
 
   return (
     <>
-      <ConfirmDialog />
       <h3>Templates</h3>
       <Table>
         <TableBody>
