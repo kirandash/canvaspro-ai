@@ -11,30 +11,25 @@ import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { useCreateProject } from "@/features/projects/api/use-create-project";
 import { useDeleteProject } from "@/features/projects/api/use-delete-project";
 import { useDuplicateProject } from "@/features/projects/api/use-duplicate-project";
-import { useFetchProjects } from "@/features/projects/api/use-fetch-projects";
+import { useFetchTemplates } from "@/features/projects/api/use-fetch-templates";
 import { useConfirmDialog } from "@/hooks/useConfirmDialog";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import {
   BadgeHelp,
   CircleAlert,
-  Copy,
+  Crown,
   Ellipsis,
   File,
   LoaderPinwheel,
-  SquareArrowOutUpRight,
-  Trash,
+  SquarePen,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-dayjs.extend(relativeTime);
-
-const RecentDesigns = () => {
+const RecentTemplates = () => {
   const { data, status, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useFetchProjects();
+    useFetchTemplates();
   const [ConfirmDialog, confirm] = useConfirmDialog(
     "Warning!",
     "Are you sure you want to delete this project?"
@@ -150,7 +145,7 @@ const RecentDesigns = () => {
   return (
     <>
       <ConfirmDialog />
-      <h3>Recent designs</h3>
+      <h3>Templates</h3>
       <Table>
         <TableBody>
           {data.pages.map((group) => (
@@ -159,32 +154,25 @@ const RecentDesigns = () => {
                 <TableRow key={project.id}>
                   <TableCell>
                     {project.thumbnailUrl && (
-                      <Image
-                        width={56}
-                        height={56}
-                        src={project.thumbnailUrl}
-                        alt="Design thumbnail"
-                        className="rounded-md object-cover size-14"
-                      />
+                      <div className="relative size-14">
+                        <Image
+                          width={56}
+                          height={56}
+                          src={project.thumbnailUrl}
+                          alt="Design thumbnail"
+                          className="rounded-md object-cover size-14"
+                        />
+                        {project.isPremium && (
+                          <div className="absolute bottom-1 right-1 bg-black/50 p-0.5 rounded">
+                            <Crown className="text-yellow-500 size-2" />
+                          </div>
+                        )}
+                      </div>
                     )}
                   </TableCell>
-                  <TableCell
-                    className="cursor-pointer"
-                    onClick={() => router.push(`/design/${project.id}/edit`)}
-                  >
-                    {project.name}
-                  </TableCell>
-                  <TableCell
-                    className="cursor-pointer"
-                    onClick={() => router.push(`/design/${project.id}/edit`)}
-                  >
+                  <TableCell>{project.name}</TableCell>
+                  <TableCell>
                     {project.width} x {project.height}
-                  </TableCell>
-                  <TableCell
-                    className="cursor-pointer"
-                    onClick={() => router.push(`/design/${project.id}/edit`)}
-                  >
-                    {dayjs(project.updatedAt).fromNow()}
                   </TableCell>
                   <TableCell className="flex items-center justify-end">
                     <DropdownMenu modal={false}>
@@ -199,28 +187,11 @@ const RecentDesigns = () => {
                       >
                         <DropdownMenuItem
                           className="cursor-pointer flex gap-2"
-                          onClick={() =>
-                            // open in a new tab
-                            window.open(`/design/${project.id}/edit`, "_blank")
-                          }
-                        >
-                          <SquareArrowOutUpRight />
-                          Open in a new tab
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          className="cursor-pointer flex gap-2"
                           onClick={() => handleCopy(project.id)}
                           disabled={duplicateMutation.isPending}
                         >
-                          <Copy />
-                          Make a copy
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          className="cursor-pointer flex gap-2"
-                          onClick={() => handleDelete(project.id)}
-                        >
-                          <Trash />
-                          Move to trash
+                          <SquarePen />
+                          Customize this template
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -246,4 +217,4 @@ const RecentDesigns = () => {
   );
 };
 
-export default RecentDesigns;
+export default RecentTemplates;

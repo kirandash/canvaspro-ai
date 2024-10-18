@@ -2,12 +2,41 @@ import { db } from "@/db/drizzle";
 import { insertProjectSchema, projects } from "@/db/schema";
 import { verifyAuth } from "@hono/auth-js";
 import { zValidator } from "@hono/zod-validator";
-import { and, desc, eq } from "drizzle-orm";
+import { and, asc, desc, eq } from "drizzle-orm";
 import { Hono } from "hono";
 import { z } from "zod";
 
 // Chain all routes from the hono instance for the RPC architecture to work
 const app = new Hono()
+  .get(
+    "/templates",
+    verifyAuth(),
+    zValidator(
+      "query",
+      z.object({ page: z.coerce.number(), limit: z.coerce.number() })
+    ),
+    async (c) => {
+      const auth = c.get("authUser");
+      const { page = 1, limit = 10 } = c.req.valid("query");
+
+      if (!auth.token?.id || typeof auth.token.id !== "string") {
+        return c.json({ error: "Unauthorized" }, 401);
+      }
+
+      const data = await db
+        .select()
+        .from(projects)
+        .where(eq(projects.isTemplate, true))
+        .limit(limit)
+        .offset((page - 1) * limit)
+        .orderBy(asc(projects.isPremium), desc(projects.updatedAt));
+
+      return c.json({
+        data,
+        nextPage: data.length === limit ? page + 1 : null,
+      });
+    }
+  )
   .get(
     "/",
     verifyAuth(),
