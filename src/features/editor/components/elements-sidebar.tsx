@@ -67,7 +67,7 @@ const ElementsSidebar = ({
       )}
       <ScrollArea className="whitespace-nowrap">
         <div className="grid grid-cols-3 gap-2 p-4">
-          {data?.data.images.map((image, index: number) => (
+          {data?.images.map((image, index: number) => (
             <Button
               key={index}
               className="relative size-[100px] overflow-hidden group"

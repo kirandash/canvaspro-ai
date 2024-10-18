@@ -19,10 +19,15 @@ import WorkspaceBackgroundColorSidebar from "@/features/editor/components/worksp
 import { selectionOnlyTools } from "@/features/editor/constants";
 import { useEditor } from "@/features/editor/hooks/useEditor";
 import { SelectedTool } from "@/features/editor/types";
+import { FetchProjectResponseType } from "@/features/projects/api/use-fetch-project";
 import { fabric } from "fabric";
 import React, { useCallback, useEffect, useRef } from "react";
 
-const Editor = () => {
+type Props = {
+  initialData: FetchProjectResponseType["data"];
+};
+
+const Editor = ({ initialData }: Props) => {
   const canvasWrapperRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef(null);
   const [selectedTool, setSelectedTool] =

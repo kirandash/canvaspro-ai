@@ -12,7 +12,8 @@ export const useFetchImages = () => {
         throw new Error("Failed to fetch images");
       }
 
-      return await res.json();
+      const { data } = await res.json();
+      return data;
     },
   });
 
