@@ -27,6 +27,7 @@ type Props = {
   initialData: FetchProjectResponseType["data"];
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Editor = ({ initialData }: Props) => {
   const canvasWrapperRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef(null);
