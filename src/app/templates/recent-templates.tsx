@@ -26,7 +26,6 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 
 const RecentTemplates = () => {
   const { data, status, fetchNextPage, hasNextPage, isFetchingNextPage } =
@@ -54,28 +53,6 @@ const RecentTemplates = () => {
       {
         onSuccess: ({ data }) => {
           router.push(`/design/${data.id}/edit`);
-        },
-        onError: (error) => {
-          console.error(error);
-        },
-      }
-    );
-  };
-
-  const handleDelete = async (id: string) => {
-    const okToDelete = await confirm();
-
-    if (!okToDelete) {
-      return;
-    }
-
-    deleteMutation.mutate(
-      {
-        id,
-      },
-      {
-        onSuccess: ({ data }) => {
-          toast.success(`Project ${data.name} deleted successfully`);
         },
         onError: (error) => {
           console.error(error);
