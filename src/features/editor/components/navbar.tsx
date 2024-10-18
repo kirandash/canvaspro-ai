@@ -13,12 +13,15 @@ import Logo from "@/features/editor/components/logo";
 import { Editor, SelectedTool } from "@/features/editor/types";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
+import { useMutationState } from "@tanstack/react-query";
 import {
+  Cloud,
   CloudDownload,
+  CloudOff,
   CloudUpload,
   File,
   FileImage,
-  HardDriveUpload,
+  LoaderPinwheel,
   MousePointer2,
   Redo2,
   Scaling,
@@ -28,12 +31,27 @@ import { useEffect, useMemo, useState } from "react";
 import { useFilePicker } from "use-file-picker";
 
 type Props = {
+  id: string;
   selectedTool: SelectedTool;
   onChangeSelectedTool: (tool: SelectedTool) => void;
   editor: Editor | undefined;
 };
 
-const Navbar = ({ selectedTool, onChangeSelectedTool, editor }: Props) => {
+const Navbar = ({ id, selectedTool, onChangeSelectedTool, editor }: Props) => {
+  const data = useMutationState({
+    filters: {
+      mutationKey: ["project", { id }],
+      exact: true,
+    },
+    select: (mutation) => mutation.state.status,
+  });
+
+  // Get the current status of the most recent mutation because we might have multiple mutations
+  const currentStatus = data[data.length - 1];
+
+  const isError = currentStatus === "error";
+  const isPending = currentStatus === "pending";
+
   const workspace = editor?.getWorkspace();
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const { openFilePicker } = useFilePicker({
@@ -200,9 +218,25 @@ const Navbar = ({ selectedTool, onChangeSelectedTool, editor }: Props) => {
         >
           <Redo2 />
         </Button>
-        <Button variant={"ghost"} size={"icon"}>
-          <HardDriveUpload />
-        </Button>
+        {/* Save */}
+        {!isPending && !isError && (
+          <Button variant={"ghost"} className="flex gap-1">
+            <Cloud />
+            Saved
+          </Button>
+        )}
+        {!isPending && isError && (
+          <Button variant={"ghost"} className="flex gap-1">
+            <CloudOff />
+            Failed
+          </Button>
+        )}
+        {isPending && (
+          <Button variant={"ghost"} className="flex gap-1">
+            <LoaderPinwheel className="animate-spin" />
+            Saving
+          </Button>
+        )}
         <div className="ml-auto">
           <ProfileButton />
         </div>

@@ -21,6 +21,7 @@ import { useCanvasEvents } from "@/features/editor/hooks/useCanvasEvents";
 import { useClipboard } from "@/features/editor/hooks/useClipboard";
 import { useHistory } from "@/features/editor/hooks/useHistory";
 import { useHotkeys } from "@/features/editor/hooks/useHotkeys";
+import useLoadState from "@/features/editor/hooks/useLoadState";
 import { useWindowEvents } from "@/features/editor/hooks/useWindowEvents";
 import { CreateEditorProps, Editor } from "@/features/editor/types";
 import {
@@ -31,7 +32,7 @@ import {
 } from "@/features/editor/utils";
 import { fabric } from "fabric";
 import { ITextOptions } from "fabric/fabric-impl";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { useAutoResize } from "./useAutoResize";
 
 const createEditor = ({
@@ -722,10 +723,27 @@ const createEditor = ({
 };
 
 type Props = {
+  defaultState?: string;
+  defaultWidth?: number;
+  defaultHeight?: number;
   selectionClearedCallback: () => void;
+  saveCallback?: (values: {
+    json: string;
+    height: number;
+    width: number;
+  }) => void;
 };
 
-const useEditor = ({ selectionClearedCallback }: Props) => {
+const useEditor = ({
+  defaultState,
+  defaultHeight,
+  defaultWidth,
+  selectionClearedCallback,
+  saveCallback,
+}: Props) => {
+  const initialState = useRef<string>(defaultState || "");
+  const initialHeight = useRef<number>(defaultHeight || 0);
+  const initialWidth = useRef<number>(defaultWidth || 0);
   const [canvasWrapper, setCanvasWrapper] = useState<HTMLDivElement | null>(
     null
   );
@@ -749,6 +767,7 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
   const { save, canRedo, canUndo, undo, redo, canvasHistory, setHistoryIndex } =
     useHistory({
       canvas,
+      saveCallback,
     });
   useHotkeys({
     canvas,
@@ -770,6 +789,14 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
   const { autoZoom } = useAutoResize({
     canvasWrapper,
     canvas,
+  });
+
+  useLoadState({
+    initialState,
+    canvas,
+    canvasHistory,
+    autoZoom,
+    setHistoryIndex,
   });
 
   const editor = useMemo(() => {
@@ -849,8 +876,8 @@ const useEditor = ({ selectionClearedCallback }: Props) => {
 
       // Create a rectangle object to define the workspace of the canvas
       const defaultCanvasWorkspace = new fabric.Rect({
-        width: 1080,
-        height: 1920,
+        width: initialWidth.current,
+        height: initialHeight.current,
         name: "defaultCanvasWorkspace",
         fill: WORKSPACE_BACKGROUND_COLOR,
         selectable: true,

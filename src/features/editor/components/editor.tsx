@@ -20,15 +20,27 @@ import { selectionOnlyTools } from "@/features/editor/constants";
 import { useEditor } from "@/features/editor/hooks/useEditor";
 import { SelectedTool } from "@/features/editor/types";
 import { FetchProjectResponseType } from "@/features/projects/api/use-fetch-project";
+import { usePatchProject } from "@/features/projects/api/use-patch-project";
 import { fabric } from "fabric";
+import debounce from "lodash.debounce";
 import React, { useCallback, useEffect, useRef } from "react";
 
 type Props = {
   initialData: FetchProjectResponseType["data"];
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Editor = ({ initialData }: Props) => {
+  const { mutate } = usePatchProject(initialData.id);
+
+  // There is no error here. vscode does not understand the type of debounce
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedSave = useCallback(
+    debounce((values: { json: string; height: number; width: number }) => {
+      mutate(values);
+    }, 1000),
+    [mutate]
+  );
+
   const canvasWrapperRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef(null);
   const [selectedTool, setSelectedTool] =
@@ -40,7 +52,11 @@ const Editor = ({ initialData }: Props) => {
   }, [selectedTool]);
 
   const { init, editor } = useEditor({
+    defaultState: initialData.json,
+    defaultWidth: initialData.width,
+    defaultHeight: initialData.height,
     selectionClearedCallback: onSelectionClear,
+    saveCallback: debouncedSave,
   });
 
   // added useCallback because onChangeSelectedTool is a dependency of useEffect
@@ -82,6 +98,7 @@ const Editor = ({ initialData }: Props) => {
   return (
     <div className="h-full flex flex-col">
       <Navbar
+        id={initialData.id}
         selectedTool={selectedTool}
         onChangeSelectedTool={onChangeSelectedTool}
         editor={editor}

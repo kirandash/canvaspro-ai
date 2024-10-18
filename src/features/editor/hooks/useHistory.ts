@@ -4,9 +4,14 @@ import React, { useCallback } from "react";
 
 type Props = {
   canvas: fabric.Canvas | null;
+  saveCallback?: (values: {
+    json: string;
+    height: number;
+    width: number;
+  }) => void;
 };
 
-export const useHistory = ({ canvas }: Props) => {
+export const useHistory = ({ canvas, saveCallback }: Props) => {
   const [historyIndex, setHistoryIndex] = React.useState<number>(0); // To keep track of the current index in the history array. We will disable undo/redo buttons if we are at the beginning or end of the array
   const canvasHistory = React.useRef<string[]>([]); // JSON stringified history of our canvas
   // The canvas events will be triggered when we undo/redo the history so we need to skip saving the current state of the canvas otherwise it will be added to the history array
@@ -24,8 +29,20 @@ export const useHistory = ({ canvas }: Props) => {
         canvasHistory.current.push(currentCanvasStateString);
         setHistoryIndex(canvasHistory.current.length - 1);
       }
+
+      const workspace = canvas
+        .getObjects()
+        .find((object) => object.name === "defaultCanvasWorkspace");
+      const height = workspace?.height || 0;
+      const width = workspace?.width || 0;
+
+      saveCallback?.({
+        json: currentCanvasStateString,
+        height,
+        width,
+      });
     },
-    [canvas]
+    [canvas, saveCallback]
   );
 
   const canUndo = useCallback(() => {

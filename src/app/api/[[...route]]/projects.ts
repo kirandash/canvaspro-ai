@@ -14,6 +14,52 @@ const app = new Hono()
     // }
     return c.json("list projects");
   })
+  .patch(
+    "/:id",
+    verifyAuth(),
+    // param validator
+    zValidator("param", z.object({ id: z.string() })),
+    // body validator
+    zValidator(
+      "json",
+      insertProjectSchema
+        .omit({
+          id: true,
+          userId: true,
+          createdAt: true,
+          updatedAt: true,
+        })
+        .partial()
+    ),
+    async (c) => {
+      // simulate error
+      // return c.json({ error: "something went wrong" }, 400);
+      const auth = c.get("authUser");
+      const { id } = c.req.valid("param");
+      const values = c.req.valid("json");
+
+      console.log("values", values);
+
+      if (!auth.token?.id || typeof auth.token.id !== "string") {
+        return c.json({ error: "Unauthorized" }, 401);
+      }
+
+      const data = await db
+        .update(projects)
+        .set({
+          ...values,
+          updatedAt: new Date(),
+        })
+        .where(and(eq(projects.id, id), eq(projects.userId, auth.token.id)))
+        .returning();
+
+      if (data.length === 0) {
+        return c.json({ error: "Failed to update project" }, 500);
+      }
+
+      return c.json({ data: data[0] });
+    }
+  )
   .post(
     "/",
     verifyAuth(),
