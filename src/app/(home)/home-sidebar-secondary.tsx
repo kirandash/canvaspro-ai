@@ -2,11 +2,14 @@
 import { Button } from "@/components/ui/button";
 import Logo from "@/features/editor/components/logo";
 import { useCreateProject } from "@/features/projects/api/use-create-project";
+import { useCheckout } from "@/features/subscription/api/use-checkout";
 import { useFetchSubscription } from "@/features/subscription/api/use-fetch-subscription";
 import { Crown, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const HomeSidebarRoutes = () => {
+  const { mutate: mutateCheckout, isPending: checkoutIsPending } =
+    useCheckout();
   const router = useRouter();
   const mutation = useCreateProject();
   const { data: subscription, isLoading: isLoadingSubscription } =
@@ -45,7 +48,11 @@ const HomeSidebarRoutes = () => {
           Create a design
         </Button>
         {!isLoadingSubscription && !subscription?.active && (
-          <Button className="flex gap-1 w-full">
+          <Button
+            className="flex gap-1 w-full"
+            onClick={() => mutateCheckout()}
+            disabled={checkoutIsPending}
+          >
             <Crown className="size-3 fill-orange-300 stroke-orange-300" />
             Upgrade to Premium
           </Button>
