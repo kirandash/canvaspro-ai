@@ -10,6 +10,7 @@ export type HomePrimarySidebarItemProps = {
   href: string;
   isActive: boolean;
   onClick?: () => void;
+  disabled?: boolean;
 };
 
 export const HomePrimarySidebarItem = ({
@@ -18,14 +19,22 @@ export const HomePrimarySidebarItem = ({
   label,
   isActive,
   onClick,
+  disabled,
 }: HomePrimarySidebarItemProps) => {
   return (
     <Link
       href={href}
-      onClick={onClick}
+      onClick={
+        disabled
+          ? (e) => {
+              e.preventDefault();
+            }
+          : onClick
+      }
       className={cn(
         "px-2 py-3 flex items-center text-stone-300 flex-col gap-1 w-full !h-full aspect-video",
-        buttonVariants({ variant: "ghost" })
+        buttonVariants({ variant: "ghost" }),
+        { "opacity-50 cursor-not-allowed": disabled }
       )}
     >
       <Icon

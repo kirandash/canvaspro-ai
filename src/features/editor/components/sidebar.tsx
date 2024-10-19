@@ -25,6 +25,7 @@ const Sidebar = ({ selectedTool, onChangeSelectedTool }: Props) => {
           label="Design"
           isActive={selectedTool === "templates"}
           onClick={() => onChangeSelectedTool("templates")}
+          disabled
         />
         <SidebarItem
           icon={Shapes}
@@ -55,6 +56,7 @@ const Sidebar = ({ selectedTool, onChangeSelectedTool }: Props) => {
           label="Projects"
           isActive={selectedTool === "projects"}
           onClick={() => onChangeSelectedTool("projects")}
+          disabled
         />
         <SidebarItem
           icon={Wand}
@@ -67,6 +69,7 @@ const Sidebar = ({ selectedTool, onChangeSelectedTool }: Props) => {
           label="Settings"
           isActive={selectedTool === "settings"}
           onClick={() => onChangeSelectedTool("settings")}
+          disabled
         />
       </ul>
     </aside>

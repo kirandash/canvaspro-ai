@@ -1,13 +1,14 @@
 import type { LucideIcon } from "lucide-react";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export type SidebarItemProps = {
   icon: LucideIcon;
   label: string;
   isActive: boolean;
   onClick: () => void;
+  disabled?: boolean;
 };
 
 export const SidebarItem = ({
@@ -15,6 +16,7 @@ export const SidebarItem = ({
   label,
   isActive,
   onClick,
+  disabled,
 }: SidebarItemProps) => {
   return (
     <Button
@@ -23,6 +25,7 @@ export const SidebarItem = ({
       className={
         "flex items-center px-2 py-3 text-stone-300 flex-col gap-1 w-full h-full aspect-video"
       }
+      disabled={disabled}
     >
       <Icon
         className={cn("shrink-0", isActive ? "stroke-cyan-600  rounded" : "")}

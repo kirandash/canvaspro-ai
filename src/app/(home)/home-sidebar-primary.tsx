@@ -20,6 +20,7 @@ const HomeSidebar = () => {
           icon={Folder}
           label="Projects"
           isActive={pathname === "/projects"}
+          disabled
         />
         <HomePrimarySidebarItem
           href="/templates"
