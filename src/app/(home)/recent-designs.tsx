@@ -25,7 +25,6 @@ import {
   SquareArrowOutUpRight,
   Trash,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -159,7 +158,7 @@ const RecentDesigns = () => {
                 <TableRow key={project.id}>
                   <TableCell>
                     {project.thumbnailUrl && (
-                      <Image
+                      <img
                         width={56}
                         height={56}
                         src={project.thumbnailUrl}

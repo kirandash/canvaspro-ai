@@ -7,7 +7,6 @@ import { Editor, SelectedTool } from "@/features/editor/types";
 import { useFetchImages } from "@/features/images/api/use-fetch-images";
 import { cn } from "@/lib/utils";
 import { Circle, CircleAlert, LoaderPinwheel, Square } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { FaDiamond } from "react-icons/fa6";
 import { IoTriangle } from "react-icons/io5";
@@ -73,12 +72,11 @@ const ElementsSidebar = ({
               className="relative size-[100px] overflow-hidden group"
               onClick={() => editor?.addPhoto(image.urls.regular)}
             >
-              <Image
-                fill
+              <img
                 key={index}
                 src={image.urls.small}
                 alt={image.alt_description ?? "Image"}
-                className="rounded-md object-cover"
+                className="rounded-md object-cover absolute inset-0 w-full h-full"
               />
               <Link
                 href={image.links.html}

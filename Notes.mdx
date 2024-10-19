@@ -36,7 +36,7 @@
 
 ### 4. Make responsive canvas using Resize Observer and add auto zoom
 
-- 🚨 TODO: Fix the canvas flickering issue on resiving
+- 🚨 TODO: Fix the canvas flickering issue on resizing
 
 ## Day 2
 
@@ -49,9 +49,6 @@
 ### 7. Fix the canvas auto zoom issue
 
 ### 8. Improve Navbar component
-
-- 🚨 TODO: Remove one icon library. Currently we have both lucide and react icons
-- 🚨 TODO: Add tooltip for undo, redo and autosave
 
 ### 9. Sidebar component
 
@@ -183,8 +180,6 @@
   - OAuth with Github
   - Test: http://localhost:3000/api/auth/providers and http://localhost:3000/api/auth/signin and http://localhost:3000/api/auth/signout
 
-- 🚨 TODO: Vercel Image optimization free tire exhausted
-
 ### 45. Postgresql DB with neon connector and Drizzle Setup with Auth.js
 
 - https://neon.tech/
@@ -248,7 +243,6 @@
 
 - patch method
 - TODO: 🚨 Add support for react-query-devtools
-- TODO: 🚨 Autosave doesnot keep track of last save change
 
 ### 54. Recent Designs or Projects, Infinite Scroll with useInfiniteQuery, open in new tab, copy and delete design
 
@@ -272,3 +266,6 @@
 - `stripe trigger payment_intent.succeeded`
 - test card: 4242 4242 4242 4242
 - Make customer portal for test active: https://dashboard.stripe.com/test/settings/billing/portal
+- Create a webhook endpoint for prod
+
+- Note: We are not using Image tag from next js beause I am currently using the free tier which has limit on the image optimization. If you have a paid plan then you can use the Image tag from next js which is recommended

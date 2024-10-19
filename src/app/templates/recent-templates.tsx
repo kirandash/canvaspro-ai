@@ -21,7 +21,6 @@ import {
   LoaderPinwheel,
   SquarePen,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -130,7 +129,7 @@ const RecentTemplates = () => {
                   <TableCell>
                     {project.thumbnailUrl && (
                       <div className="relative size-14">
-                        <Image
+                        <img
                           width={56}
                           height={56}
                           src={project.thumbnailUrl}
